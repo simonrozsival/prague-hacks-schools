@@ -1,13 +1,13 @@
-{
+ï»¿{
     "l1" : {
         "categories": [
             {
                 "key" : "general", 
-                "name" : "Hlavní", 
+                "name" : "HlavnÃ­", 
                 "attributes": [
                     {
                         "key" : "name",
-                        "name" : "Název školy",
+                        "name" : "NÃ¡zev Å¡koly",
                         "type" : "string"
                     },
                     {
@@ -17,7 +17,7 @@
                     },
                     {
                         "key" : "headmaster",
-                        "name" : "Øeditel", 
+                        "name" : "Å˜editel", 
                         "type" : "string"
                     }
                 ]
@@ -28,11 +28,11 @@
         "categories": [
             {
                 "key" : "food", 
-                "name" : "Jídlo", 
+                "name" : "JÃ­dlo", 
                 "attributes": [
                     {
                         "key" : "at_premises",
-                        "name" : "Školní jídelna",
+                        "name" : "Å kolnÃ­ jÃ­delna",
                         "type" : "boolean"
                     },
                     {
@@ -42,14 +42,14 @@
                     },
                     {
                         "key" : "avg_price",
-                        "name" : "Cena obìda", 
+                        "name" : "Cena obÄ›da", 
                         "type" : "float"
                     }
                 ]
             }, 
             {
                 "key" : "teaching", 
-                "name" : "Výuka", 
+                "name" : "VÃ½uka", 
                 "attributes": [
                     {
                         "key" : "languages",
@@ -58,7 +58,7 @@
                     },
                     {
                         "key" : "pe_hours_per_week",
-                        "name" : "Hodin tìlocviku týdnì", 
+                        "name" : "Hodin tÄ›locviku tÃ½dnÄ›", 
                         "type" : "float"
                     }
                 ]
