@@ -1,4 +1,7 @@
 <?php
+use GuzzleHttp\Handler\CurlHandler;
+use GuzzleHttp\HandlerStack;
+
 $app['elastic'] = $app->share(function ($app) {
     return new \Elastica\Client([
         'host' => $app['elastic.host'],
@@ -21,9 +24,12 @@ $app['schools'] = $app->share(function ($app) {
 
 $app['guzzle'] = $app->share(function ($app) {
     $baseUri = $app['elastic.host'] . ':' . $app['elastic.port'];
+    $stack = new HandlerStack();
+    $stack->setHandler(new CurlHandler());
     $config = [
         'base_uri' => $baseUri,
         'exceptions' => false,
+        'handler' => $stack,
     ];
     $client = new \GuzzleHttp\Client($config);
     return $client;
