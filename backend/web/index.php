@@ -34,10 +34,21 @@ $app->get('/api/subscribe', function (Request $request) use ($app) {
         $body = json_decode($response->getBody());
         return $app->json([
             'success' => true,
-            'cancel_token' => $body->_source->hash,
+            'cancelation_token' => $body->_source->cancelation_token,
         ]);
     }
+});
 
+$app->get('/api/unsubscribe', function (Request $request) use ($app) {
+    // check params
+    $schoolId = $request->get('school_id');
+    $email = $request->get('email');
+    $cancelationToken = $request->get('cancelation_token');
+    if (!$schoolId || !$email || !$cancelationToken) {
+        throw new Exception('SchoolId, Email or Cancelation token not set');
+    }
+    $model = new Subscription($app);
+    return $model->removeSubscription($schoolId, $email, $cancelationToken);
 });
 
 $app->get('/backend/', function () use ($app) {

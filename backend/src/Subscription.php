@@ -2,6 +2,7 @@
 namespace Hacks;
 
 use Silex\Application;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class Subscription
 {
@@ -24,21 +25,19 @@ class Subscription
     {
         $id = self::getId($schoolId, $email);
 
-        $hash = sha1(openssl_random_pseudo_bytes(64));
+        $cancelationToken = Util::generateRandomHash();
 
         $document = new \Elastica\Document($id, [
             'school_id' => $schoolId,
             'email' => $email,
-            'hash' => $hash,
+            'cancelation_token' => $cancelationToken,
         ]);
-        /** @var \Elastica\Client $es */
-        $es = $this->_app['elastic'];
-        $esType = $es->getIndex('subscriptions')->getType('subscriptions');
-        $response = $esType->addDocument($document);
+
+        $response = $this->_getElasticType()->addDocument($document);
         if ($response->getData()['ok'] === true) {
             return $this->_app->json([
                 'success' => true,
-                'cancel_token' => $hash,
+                'cancelation_token' => $cancelationToken,
             ]);
         } else {
             return $this->_app->json([
@@ -56,5 +55,31 @@ class Subscription
         /** @var \GuzzleHttp\Client $guzzle */
         $guzzle = $this->_app['guzzle'];
         return $guzzle->get('/subscriptions/subscriptions/' . $id);
+    }
+
+    public function removeSubscription($schoolId, $email, $cancelationToken)
+    {
+        $response = $this->testSubscription($schoolId, $email);
+        if ($response->getStatusCode() == 200) {
+            $document = json_decode($response->getBody());
+            if ($document->_source->cancelation_token == $cancelationToken) {
+                $this->_getElasticType()->deleteIds([self::getId($schoolId, $email)]);
+                return new JsonResponse(['success' => true]);
+            } else {
+                return new JsonResponse(['success' => false, 'msg' => sprintf('Cancelation token %s does not match', $cancelationToken)]);
+            }
+        } else {
+            return new JsonResponse(['success' => false, 'msg' => 'No such subscription']);
+        }
+    }
+
+    /**
+     * @return \Elastica\Client
+     */
+    protected function _getElasticType()
+    {
+        $es = $this->_app['elastic'];
+        $esType = $es->getIndex('subscriptions')->getType('subscriptions');
+        return $esType;
     }
 }
