@@ -1,0 +1,1 @@
+{"version":3,"file":"app.js","sourceRoot":"","sources":["../typescripts/app.ts"],"names":["Detail","Detail.constructor","Detail.fetch","Detail.Render"],"mappings":"AACA;IAAAA;IAeAC,CAACA;IAXAD;;OAEGA;IACIA,YAAKA,GAAZA,UAAaA,EAAUA;IAEvBE,CAACA;IAEMF,uBAAMA,GAAbA,UAAcA,MAAMA;IAEpBG,CAACA;IAXMH,WAAIA,GAAOA,EAAEA,CAACA;IAatBA,aAACA;AAADA,CAACA,AAfD,IAeC"}

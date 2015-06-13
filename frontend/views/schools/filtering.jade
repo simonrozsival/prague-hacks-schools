@@ -1,0 +1,9 @@
+extends ../layout
+
+block content
+	h1 Školy!
+
+	ul
+	each school in schools
+		li
+			a(href="/schools/get-detail/" + school.id) #{school.name}
