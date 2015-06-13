@@ -1,4 +1,6 @@
 <?php
+ini_set('display_errors', 'on');
+error_reporting(E_ALL);
 require_once __DIR__ . '/../vendor/autoload.php';
 define('ROOT', realpath(__DIR__ . '/../'));
 
