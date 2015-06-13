@@ -19,7 +19,7 @@ $app->get('/api/', function () use ($app) {
     return $app->json(['msg' => 'Hello, world!']);
 });
 
-$app->get('/api/subscribe', function (Request $request) use ($app) {
+$app->post('/api/subscribe', function (Request $request) use ($app) {
     // check params
     $schoolId = $request->get('school_id');
     $email = $request->get('email');
@@ -40,7 +40,7 @@ $app->get('/api/subscribe', function (Request $request) use ($app) {
     }
 });
 
-$app->get('/api/unsubscribe', function (Request $request) use ($app) {
+$app->post('/api/unsubscribe', function (Request $request) use ($app) {
     // check params
     $schoolId = $request->get('school_id');
     $email = $request->get('email');
