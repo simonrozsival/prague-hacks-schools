@@ -1,6 +1,7 @@
 <?php
 use GuzzleHttp\Exception\ClientException;
 use Hacks\Subscription;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 ini_set('display_errors', 'on');
@@ -23,7 +24,7 @@ $app->get('/api/subscribe', function (Request $request) use ($app) {
     $schoolId = $request->get('school_id');
     $email = $request->get('email');
     if (!$schoolId || !$email) {
-        throw new Exception('SchoolId or Email not set');
+        return new JsonResponse(['success' => false, 'msg' => 'SchoolId or Email not set']);
     }
     $model = new Subscription($app);
     $response = $model->testSubscription($schoolId, $email);
@@ -45,7 +46,7 @@ $app->get('/api/unsubscribe', function (Request $request) use ($app) {
     $email = $request->get('email');
     $cancelationToken = $request->get('cancel_token');
     if (!$schoolId || !$email || !$cancelationToken) {
-        throw new Exception('SchoolId, Email or Cancelation token not set');
+        return new JsonResponse(['success' => false, 'msg' => 'SchoolId, Email or Cancelation token not set']);
     }
     $model = new Subscription($app);
     return $model->removeSubscription($schoolId, $email, $cancelationToken);
