@@ -1,0 +1,6 @@
+{
+    "facets" : {
+      "langs" : { "terms" : {"field" : "l2.teaching.languages"} }, 
+      "food" : { "terms" : {"field" : "l2.food.at_premises"} }
+    }
+  }
