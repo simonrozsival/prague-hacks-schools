@@ -3,7 +3,8 @@
     "require": {
         "silex/silex": "~1.3",
         "twig/twig": "^1.18",
-        "symfony/twig-bridge": "^2.7"
+        "symfony/twig-bridge": "^2.7",
+        "ruflin/elastica": "^2.1"
     },
     "authors": [
         {
