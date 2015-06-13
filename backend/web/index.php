@@ -1,4 +1,6 @@
 <?php
+use GuzzleHttp\Exception\ClientException;
+use Hacks\Subscription;
 use Symfony\Component\HttpFoundation\Request;
 
 ini_set('display_errors', 'on');
@@ -9,15 +11,33 @@ define('ROOT', realpath(__DIR__ . '/../'));
 $app = new Silex\Application();
 $app['debug'] = true;
 
+include ROOT . '/app/services.php';
+include ROOT . '/app/config.php';
+
 $app->get('/api/', function () use ($app) {
     return $app->json(['msg' => 'Hello, world!']);
 });
 
-$app->post('/api/subscribe', function (Request $request) use ($app) {
+$app->get('/api/subscribe', function (Request $request) use ($app) {
+    // check params
     $schoolId = $request->get('school_id');
     $email = $request->get('email');
-    
-    return $app->json(['msg' => 'Hello, world!']);
+    if (!$schoolId || !$email) {
+        throw new Exception('SchoolId or Email not set');
+    }
+    $model = new Subscription($app);
+    $response = $model->testSubscription($schoolId, $email);
+
+    if ($response->getStatusCode() !== 200) {
+        return $model->insert($schoolId, $email);
+    } else {
+        $body = json_decode($response->getBody());
+        return $app->json([
+            'success' => true,
+            'cancel_token' => $body->_source->hash,
+        ]);
+    }
+
 });
 
 $app->get('/backend/', function () use ($app) {
