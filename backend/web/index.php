@@ -1,5 +1,6 @@
 <?php
 use GuzzleHttp\Exception\ClientException;
+use Hacks\EditRequest;
 use Hacks\Subscription;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -53,6 +54,14 @@ $app->post('/api/unsubscribe', function (Request $request) use ($app) {
     }
     $model = new Subscription($app);
     return $model->removeSubscription($schoolId, $email, $cancelationToken);
+});
+
+$app->post('api/request-edit', function (Request $request) use ($app) {
+    $model = new EditRequest($app);
+    $schoolId = $request->get('school_id');
+    $email = $request->get('email');
+    $model->handleEditRequest($schoolId, $email);
+    return $app->json(['success' => true]);
 });
 
 $app->get('/backend/', function () use ($app) {

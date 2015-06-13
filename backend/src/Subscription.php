@@ -25,7 +25,7 @@ class Subscription
     {
         $id = self::getId($schoolId, $email);
 
-        $cancelToken = Util::generateRandomHash();
+        $cancelToken = Util::generateRandomToken();
 
         $document = new \Elastica\Document($id, [
             'school_id' => $schoolId,

@@ -5,7 +5,10 @@
         "twig/twig": "^1.18",
         "symfony/twig-bridge": "^2.7",
         "ruflin/elastica": "^2.1",
-        "guzzlehttp/guzzle": "^6.0"
+        "guzzlehttp/guzzle": "^6.0",
+        "zf1/zend-db": "^1.12",
+        "zf1/zend-mail": "^1.12",
+        "zf1/zend-validate": "^1.12"
     },
     "authors": [
         {

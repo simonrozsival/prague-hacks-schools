@@ -34,3 +34,13 @@ $app['guzzle'] = $app->share(function ($app) {
     $client = new \GuzzleHttp\Client($config);
     return $client;
 });
+
+$app['db'] = $app->share(function ($app) {
+    $db = Zend_Db::factory('pdo_mysql', [
+        'username' => $app['db.username'],
+        'password' => $app['db.password'],
+        'host' => $app['db.host'],
+        'dbname' => $app['db.dbname'],
+    ]);
+    return $db;
+});
