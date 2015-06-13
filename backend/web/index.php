@@ -1,4 +1,6 @@
 <?php
+use Symfony\Component\HttpFoundation\Request;
+
 ini_set('display_errors', 'on');
 error_reporting(E_ALL);
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -8,6 +10,13 @@ $app = new Silex\Application();
 $app['debug'] = true;
 
 $app->get('/api/', function () use ($app) {
+    return $app->json(['msg' => 'Hello, world!']);
+});
+
+$app->post('/api/subscribe', function (Request $request) use ($app) {
+    $schoolId = $request->get('school_id');
+    $email = $request->get('email');
+    
     return $app->json(['msg' => 'Hello, world!']);
 });
 
