@@ -34,7 +34,7 @@ $app->get('/api/subscribe', function (Request $request) use ($app) {
         $body = json_decode($response->getBody());
         return $app->json([
             'success' => true,
-            'cancelation_token' => $body->_source->cancelation_token,
+            'cancel_token' => $body->_source->cancel_token,
         ]);
     }
 });
@@ -43,7 +43,7 @@ $app->get('/api/unsubscribe', function (Request $request) use ($app) {
     // check params
     $schoolId = $request->get('school_id');
     $email = $request->get('email');
-    $cancelationToken = $request->get('cancelation_token');
+    $cancelationToken = $request->get('cancel_token');
     if (!$schoolId || !$email || !$cancelationToken) {
         throw new Exception('SchoolId, Email or Cancelation token not set');
     }

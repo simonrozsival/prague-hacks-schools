@@ -25,19 +25,19 @@ class Subscription
     {
         $id = self::getId($schoolId, $email);
 
-        $cancelationToken = Util::generateRandomHash();
+        $cancelToken = Util::generateRandomHash();
 
         $document = new \Elastica\Document($id, [
             'school_id' => $schoolId,
             'email' => $email,
-            'cancelation_token' => $cancelationToken,
+            'cancel_token' => $cancelToken,
         ]);
 
         $response = $this->_getElasticType()->addDocument($document);
         if ($response->getData()['ok'] === true) {
             return $this->_app->json([
                 'success' => true,
-                'cancelation_token' => $cancelationToken,
+                'cancel_token' => $cancelToken,
             ]);
         } else {
             return $this->_app->json([
@@ -57,16 +57,16 @@ class Subscription
         return $guzzle->get('/subscriptions/subscriptions/' . $id);
     }
 
-    public function removeSubscription($schoolId, $email, $cancelationToken)
+    public function removeSubscription($schoolId, $email, $cancelToken)
     {
         $response = $this->testSubscription($schoolId, $email);
         if ($response->getStatusCode() == 200) {
             $document = json_decode($response->getBody());
-            if ($document->_source->cancelation_token == $cancelationToken) {
+            if ($document->_source->cancel_token == $cancelToken) {
                 $this->_getElasticType()->deleteIds([self::getId($schoolId, $email)]);
                 return new JsonResponse(['success' => true]);
             } else {
-                return new JsonResponse(['success' => false, 'msg' => sprintf('Cancelation token %s does not match', $cancelationToken)]);
+                return new JsonResponse(['success' => false, 'msg' => sprintf('Cancelation token %s does not match', $cancelToken)]);
             }
         } else {
             return new JsonResponse(['success' => false, 'msg' => 'No such subscription']);
