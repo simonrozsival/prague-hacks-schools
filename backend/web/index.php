@@ -7,7 +7,7 @@ define('ROOT', realpath(__DIR__ . '/../'));
 $app = new Silex\Application();
 $app['debug'] = true;
 
-$app->get('/api', function () use ($app) {
+$app->get('/api/', function () use ($app) {
     return $app->json(['msg' => 'Hello, world!']);
 });
 
