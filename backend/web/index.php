@@ -7,7 +7,9 @@ $app['debug'] = true;
 
 
 $app->get('/', function () {
-    return "Hello World!";
+    return '{
+  "msg": "Hello, world!"
+}';
 });
 
 $app->run();
