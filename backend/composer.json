@@ -1,0 +1,12 @@
+{
+    "name": "praguehacks/schools",
+    "require": {
+        "silex/silex": "~1.3"
+    },
+    "authors": [
+        {
+            "name": "Prague Hacks",
+            "email": "info@praguehacks.cz"
+        }
+    ]
+}
