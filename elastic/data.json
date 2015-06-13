@@ -1,27 +1,23 @@
 {
     "id": 1,
-    "l1": {
-        "general": {
-            "name": "Základní škola Letná",
-            "position": {
-                "x": 11.2,
-                "y": 22.1
-            },
-            "headmaster": "Karel Šerý"
-        }
-    },
-    "l2": {
-        "food": {
-            "at_premises": false,
-            "quality": "not so good",
-            "avg_price": 22.5
+    "general": {
+        "name": "Základní škola Letná",
+        "position": {
+            "x": 11.2,
+            "y": 22.1
         },
-        "teaching": {
-            "languages": [
-                "english",
-                "spanish"
-            ],
-            "pe_hours_per_week": 1
-        }
+        "headmaster": "Karel Šerý"
+    },
+    "food": {
+        "at_premises": false,
+        "quality": "not so good",
+        "avg_price": 22.5
+    },
+    "teaching": {
+        "languages": [
+            "english",
+            "spanish"
+        ],
+        "pe_hours_per_week": 1
     }
 }

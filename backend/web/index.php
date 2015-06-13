@@ -64,6 +64,17 @@ $app->post('api/request-edit', function (Request $request) use ($app) {
     return $app->json(['success' => true]);
 });
 
+$app->post('/api/school/{school_id}/edit/{edit_token}', function (Request $request, $school_id, $edit_token) use ($app) {
+    // check the edit token
+
+    // get the design document (check the level privileges)
+    // retrieve the actual school document from elastic and store it to versions into MySQL
+
+    // store the new document to elastic
+
+    return $app->json(['success' => true]);
+});
+
 $app->get('/backend/', function () use ($app) {
     return $app['twig']->render('index/index.twig', []);
 });

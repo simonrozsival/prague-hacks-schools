@@ -1,28 +1,24 @@
 {
     "id": 2,
-    "l1": {
-        "general": {
-            "name": "Základní škola Praha",
-            "position": {
-                "x": 11.2,
-                "y": 22.1
-            },
-            "headmaster": "Josef Novák"
-        }
-    },
-    "l2": {
-        "food": {
-            "at_premises": true,
-            "quality": "great",
-            "avg_price": 23.0
+    "general": {
+        "name": "Základní škola Praha",
+        "position": {
+            "x": 11.2,
+            "y": 22.1
         },
-        "teaching": {
-            "languages": [
-                "english",
-                "german",
-                "spanish"
-            ],
-            "pe_hours_per_week": 3
-        }
+        "headmaster": "Josef Novák"
+    },
+    "food": {
+        "at_premises": true,
+        "quality": "great",
+        "avg_price": 23.0
+    },
+    "teaching": {
+        "languages": [
+            "english",
+            "german",
+            "spanish"
+        ],
+        "pe_hours_per_week": 3
     }
 }

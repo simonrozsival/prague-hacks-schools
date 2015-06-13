@@ -1,68 +1,65 @@
 ﻿{
-    "l1" : {
-        "categories": [
-            {
-                "key" : "general", 
-                "name" : "Hlavní", 
-                "attributes": [
-                    {
-                        "key" : "name",
-                        "name" : "Název školy",
-                        "type" : "string"
-                    },
-                    {
-                        "key" : "position",
-                        "name" : "Pozice", 
-                        "type" : "point"
-                    },
-                    {
-                        "key" : "headmaster",
-                        "name" : "Ředitel", 
-                        "type" : "string"
-                    }
-                ]
-            }
-        ]
-    },
-    "l2" : {
-        "categories": [
-            {
-                "key" : "food", 
-                "name" : "Jídlo", 
-                "attributes": [
-                    {
-                        "key" : "at_premises",
-                        "name" : "Školní jídelna",
-                        "type" : "boolean"
-                    },
-                    {
-                        "key" : "quality",
-                        "name" : "Kvalita", 
-                        "type" : "string"
-                    },
-                    {
-                        "key" : "avg_price",
-                        "name" : "Cena oběda", 
-                        "type" : "float"
-                    }
-                ]
-            }, 
-            {
-                "key" : "teaching", 
-                "name" : "Výuka", 
-                "attributes": [
-                    {
-                        "key" : "languages",
-                        "name" : "Jazyky",
-                        "type" : "array"
-                    },
-                    {
-                        "key" : "pe_hours_per_week",
-                        "name" : "Hodin tělocviku týdně", 
-                        "type" : "float"
-                    }
-                ]
-            }
-        ]
-    }
+    "categories": [
+        {
+            "key" : "general",
+            "level": 1,
+            "name" : "Hlavní", 
+            "attributes": [
+                {
+                    "key" : "name",
+                    "name" : "Název školy",
+                    "type" : "string"
+                },
+                {
+                    "key" : "position",
+                    "name" : "Pozice", 
+                    "type" : "point"
+                },
+                {
+                    "key" : "headmaster",
+                    "name" : "Ředitel", 
+                    "type" : "string"
+                }
+            ]
+        },
+        {
+            "key" : "food",
+            "name" : "Jídlo",
+            "level" : 2,
+            "attributes": [
+                {
+                    "key" : "at_premises",
+                    "name" : "Školní jídelna",
+                    "type" : "boolean"
+                },
+                {
+                    "key" : "quality",
+                    "name" : "Kvalita", 
+                    "type" : "string"
+                },
+                {
+                    "key" : "avg_price",
+                    "name" : "Cena oběda", 
+                    "type" : "float"
+                }
+            ]
+        }, 
+        {
+            "key" : "teaching",
+            "name" : "Výuka",
+            "level" : 2,
+            "attributes": [
+                {
+                    "key" : "languages",
+                    "name" : "Jazyky",
+                    "type" : "array"
+                },
+                {
+                    "key" : "pe_hours_per_week",
+                    "name" : "Hodin tělocviku týdně", 
+                    "type" : "float"
+                }
+            ]
+        }
+    ]
 }
