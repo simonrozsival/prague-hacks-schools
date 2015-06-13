@@ -34,7 +34,7 @@ class Subscription
         ]);
 
         $response = $this->_getElasticType()->addDocument($document);
-        if ($response->getData()['ok'] === true) {
+        if ($response->getData()['created'] === true) {
             return $this->_app->json([
                 'success' => true,
                 'cancel_token' => $cancelToken,
