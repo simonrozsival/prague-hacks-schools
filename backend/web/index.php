@@ -18,6 +18,9 @@ include ROOT . '/app/config.php';
 $app->get('/api/', function () use ($app) {
     return $app->json(['msg' => 'Hello, world!']);
 });
+set_exception_handler(function ($e) use ($app) {
+    $app->json($e);
+});
 
 $app->post('/api/subscribe', function (Request $request) use ($app) {
     // check params
