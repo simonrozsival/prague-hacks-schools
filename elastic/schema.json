@@ -1,0 +1,68 @@
+{
+    "l1" : {
+        "categories": [
+            {
+                "key" : "general", 
+                "name" : "Hlavní", 
+                "attributes": [
+                    {
+                        "key" : "name",
+                        "name" : "Název školy",
+                        "type" : "string"
+                    },
+                    {
+                        "key" : "position",
+                        "name" : "Pozice", 
+                        "type" : "point"
+                    },
+                    {
+                        "key" : "headmaster",
+                        "name" : "Øeditel", 
+                        "type" : "string"
+                    }
+                ]
+            }
+        ]
+    },
+    "l2" : {
+        "categories": [
+            {
+                "key" : "food", 
+                "name" : "Jídlo", 
+                "attributes": [
+                    {
+                        "key" : "at_premises",
+                        "name" : "Školní jídelna",
+                        "type" : "boolean"
+                    },
+                    {
+                        "key" : "quality",
+                        "name" : "Kvalita", 
+                        "type" : "string"
+                    },
+                    {
+                        "key" : "avg_price",
+                        "name" : "Cena obìda", 
+                        "type" : "float"
+                    }
+                ]
+            }, 
+            {
+                "key" : "teaching", 
+                "name" : "Výuka", 
+                "attributes": [
+                    {
+                        "key" : "languages",
+                        "name" : "Jazyky",
+                        "type" : "array"
+                    },
+                    {
+                        "key" : "pe_hours_per_week",
+                        "name" : "Hodin tìlocviku týdnì", 
+                        "type" : "float"
+                    }
+                ]
+            }
+        ]
+    }
+}
