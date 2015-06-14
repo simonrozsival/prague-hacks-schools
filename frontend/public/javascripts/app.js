@@ -237,7 +237,7 @@ $(function() {
               }
           });
       };
-    $("body").on("click", "#filter", processFilter());
+    $("body").on("click", "#filter", processFilter);
 
     function removeMapPoints() {
         for(var i = 0; i < graphicItems.length; ++i) {
