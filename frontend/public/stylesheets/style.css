@@ -1,8 +1,326 @@
+html,
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: "Hind", sans-serif;
+  font-weight: 300;
+  font-size: 10.66666667pt;
 }
-
-a {
-  color: #00B7FF;
+* {
+  font-weight: normal;
+}
+strong {
+  font-weight: semibold;
+}
+.container {
+  max-width: 940px;
+}
+/**
+ * Maps
+ */
+.map {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+/**
+ * Layout
+ */
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-weight: 300;
+  color: #252525;
+}
+h1.underlined-title,
+h2.underlined-title,
+h3.underlined-title,
+h4.underlined-title,
+h5.underlined-title {
+  padding: 15px 30px 5px;
+  border-bottom: 1px solid #252525;
+  display: inline-block;
+  text-transform: uppercase;
+  font-weight: 300;
+}
+header#top {
+  background: #ffffff;
+  height: 80px;
+  border-bottom: 1px solid #252525;
+}
+header#top h1 {
+  display: inline-block;
+  line-height: 50px;
+  height: 46px;
+  font-size: 22pt;
+  font-weight: 300;
+  margin: 17px 0;
+}
+header#top h1 a {
+  color: #8bc500;
+  font-weight: 300;
+}
+header#top h1 a:hover {
+  text-decoration: none;
+}
+header#top img {
+  height: 46px;
+  line-height: 80px;
+  margin-right: 20px;
+}
+header#top a.pull-right {
+  line-height: 80px;
+  text-decoration: none;
+  color: #252525;
+}
+.homepage {
+  text-align: center;
+  padding: 50px 0 80px;
+  background: #f3f3f3;
+}
+.homepage h1 {
+  font-size: 40pt;
+  font-weight: 300;
+}
+.homepage h1 strong {
+  color: #e60434;
+}
+.homepage p.subtitle {
+  color: #252525;
+  font-size: 18pt;
+  font-weight: 300;
+}
+.btn-pink {
+  background: #e60434;
+  color: #ffffff;
+  text-transform: uppercase;
+  border-color: #e60434;
+}
+.btn-pink:hover {
+  color: #ffffff;
+  background: #b40329;
+}
+.btn-pink:focus {
+  outline: none;
+  color: #ffffff;
+}
+.btn-pink:active {
+  outline: none;
+  background: #9b0323;
+}
+#search-box {
+  position: relative;
+  padding: 10px 20px 20px;
+  margin-bottom: 40px;
+}
+#search-box:before {
+  content: " ";
+  display: block;
+  width: 120%;
+  height: 140%;
+  position: absolute;
+  left: -10%;
+  top: -20%;
+  border-radius: 2px;
+  background: url("../images/box.svg") no-repeat;
+  background-size: cover;
+}
+#search-box label {
+  margin-top: 10px;
+  font-size: 16pt;
+}
+#search-box input {
+  border-radius: 2px;
+}
+.white {
+  background: #ffffff;
+}
+.gray {
+  background: #f3f3f3;
+}
+.homepage-section {
+  padding: 40px 0;
+  text-align: center;
+}
+.homepage-section.white h3 {
+  color: #8bc500;
+}
+.homepage-section .item {
+  margin: 30px 0;
+}
+.homepage-section .item p.img-wrapper {
+  height: 100px;
+}
+.homepage-section.gray .item .bubble {
+  margin-top: 40px;
+  position: relative;
+  border-radius: 2px;
+  padding: 15px;
+  background: #ebebeb;
+}
+.homepage-section.gray .item .bubble:before {
+  content: " ";
+  display: block;
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-bottom: 15px solid #ebebeb;
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  margin-left: -15px;
+}
+.homepage-section.gray .item .bubble h3 {
+  margin-top: 10px;
+}
+footer#bottom {
+  padding: 20px 0 40px;
+}
+footer#bottom ul li {
+  display: inline-block;
+}
+footer#bottom ul li:not(:last-child) {
+  margin-right: 10px;
+}
+footer#bottom ul li a {
+  color: #252525;
+}
+footer#bottom ul li:not(:first-child):before {
+  content: "|";
+  margin-right: 10px;
+}
+button.school {
+  background: #ffffff;
+  border: 1px solid #ebebeb;
+  border-radius: 1px;
+  padding: 20px 50px 20px 25px;
+  position: relative;
+  margin-top: 25px;
+  width: 100%;
+  text-align: left;
+}
+button.school h2 {
+  font-size: 14pt;
+  margin: 0 0 15px 0;
+  font-weight: semibold;
+}
+button.school:focus {
+  outline: none;
+}
+button.school.focus {
+  transition: all 0.3s;
+  outline: none;
+}
+button.school:not(.focus) {
+  border-color: transparent;
+  background: transparent;
+}
+button.school:not(.focus):before {
+  border-color: transparent;
+}
+button.school:before {
+  content: " ";
+  border: none;
+  border-left: 1px solid #ebebeb;
+  background: #f3f3f3 url("../images/arrow-right.svg") no-repeat center center;
+  height: 100%;
+  width: 30px;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+button.school table td img {
+  margin-right: 15px;
+}
+button.school table td a {
+  color: #8bc500;
+}
+.area {
+  font-weight: 300;
+  font-size: 12pt;
+  margin-bottom: 25px;
+}
+#details-column {
+  min-height: 600px;
+  margin-bottom: 50px;
+}
+#details-column #searchable-map {
+  height: 600px;
+  margin: 30px 0;
+}
+#details-column .detail {
+  position: absolute;
+  z-index: 200;
+  width: 100%;
+}
+#details-column .detail .school-detail {
+  background: #ffffff;
+  border: 1px solid #ebebeb;
+  padding: 25px 0;
+  margin-top: 25px;
+}
+#details-column .detail .school-detail .segment {
+  padding: 25px;
+}
+#details-column .detail .school-detail .segment:not(:last-child) {
+  border-bottom: 1px solid #ebebeb;
+}
+#search .esriGeocoder,
+#search .esriGeocoderResults {
+  border-radius: 2px;
+  border-color: #ebebeb;
+}
+#search .esriGeocoderContainer {
+  width: 100%;
+}
+#search .esriGeocoderContainer input {
+  width: 80%;
+}
+span#tags-count {
+  width: 22px;
+  padding-right: 4px;
+  margin-right: 10px;
+  height: 21px;
+  line-height: 21px;
+  text-align: center;
+  display: inline-block;
+  background: url("../images/tag.svg") no-repeat center center;
+  color: #ffffff;
+  font-weight: 300;
+}
+button#toggle-settings {
+  background: #f3f3f3;
+  border: 1px solid #c3c3c3;
+  border-radius: 2px;
+  padding: 5px 42px 5px 12px;
+  position: relative;
+}
+button#toggle-settings:before {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 30px;
+  height: 100%;
+  border-left: 1px solid #c3c3c3;
+}
+button#toggle-settings:focus {
+  outline: none;
+}
+button#toggle-settings:hover {
+  background: #ebebeb;
+}
+#advanced-filtering {
+  display: none;
+  padding: 25px;
+  background: #ffffff;
+  border: 1px solid #ebebeb;
+  border-radius: 2px;
 }

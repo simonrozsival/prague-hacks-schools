@@ -1,4 +1,70 @@
+
+.text-center
+	h1.underlined-title Detail školy
+
 div(class="school-detail")
-	h1= school.name
-	p
-		Web školy: #{school.web}
+	.segment
+		p Ředitel školy: #{school.general.headmaster}	
+	
+	.segment
+		button(type="button", class="btn btn-block btn-primary", data-toggle="modal", data-target="#subscribe-modal" id="subscribe-btn") Přihlásit se k odběru informací emailem
+		button(type="button", class="btn btn-block btn-default", data-toggle="modal", data-target="#request-editing-modal" id="request-editing-btn") Vyžádat si možnost editace 
+		button(type="button", class="btn btn-block btn-default", data-toggle="modal", data-target="#claim-modal" id="claim-btn") Převzít správu školního profilu
+
+
+div(class="modal fade", id="subscribe-modal")
+	div(class="modal-dialog")
+		div(class="modal-content")
+			div(class="modal-header")
+				button(class="close", type="button", data-dismiss="modal", aria-label="Zavřít")
+					span(aria-hidden="true") &times;
+				h4(class="modal-title") Získat správu školního profilu
+			div(class="modal-body")
+				p Jestliže jste ředitel nebo učitel této školy, můžete si požádat o přidělení výhradních práv na editaci zdejšího školního profilu.
+				p(class="form-group")
+					label(for="subscribe-email") Vaše emailová adresa
+					la
+					input(type="email", class="form-control", id="subscribe-email", placeholder="Zadejte svůj email")					
+								
+			div(class="modal-footer")
+				p
+					button(type="button", class="btn btn-success", id="subscribe", data-school_id=school.id) Přihlásit se k odběru informací
+					button(type="button", class="btn btn-default", data-dismiss="modal") Zavřít
+				
+div(class="modal fade", id="request-editing-modal")
+	div(class="modal-dialog")
+		div(class="modal-content")
+			div(class="modal-header")
+				button(class="close", type="button", data-dismiss="modal", aria-label="Zavřít")
+					span(aria-hidden="true") &times;
+				h4(class="modal-title") Vyžádat si možnost editace informací o škole
+			div(class="modal-body")
+				p Pokud jsou některá data neaktuální nebo chybná, můžete je upravit. Pro možnost editace vyžadujeme zadání emailové adresy, abychom ověřili, že jste člověk a ne robot. Vaši emailovou adresu nebudeme uchovávat déle než jeden den a zašleme vám pouze jeden email s přístupovým odkazem.
+				p(class="form-group")
+					label(for="editing-email") Vaše emailová adresa
+					input(type="email", class="form-control", id="request-editing-email", placeholder="Zadejte svůj email")
+								
+			div(class="modal-footer")
+				button(type="button", class="btn btn-success", id="request-editing", data-school_id=school.id) Zaslat email s odkazem pro jednorázový přístupem
+				button(type="button", class="btn btn-default", data-dismiss="modal") Zavřít
+				
+div(class="modal fade", id="claim-modal")
+	div(class="modal-dialog")
+		div(class="modal-content")
+			div(class="modal-header")
+				button(class="close", type="button", data-dismiss="modal", aria-label="Zavřít")
+					span(aria-hidden="true") &times;
+				h4(class="modal-title") Vyžádat si převzetí správy školního profilu
+			div(class="modal-body")
+				p Pokud jste ředitelem, učitelem nebo jiným zaměstnancem školy, můžete nás požádat o přidělení výhradní kontroly nad informacemi na vašem účtu a my vám ji poskytneme. 
+				p(class="form-group")
+					label(for="editing-email") Vaše emailová adresa
+					input(type="email", class="form-control", id="claim-email", placeholder="Zadejte svůj email")
+				p(class="form-group")
+					label(for="editing-email") Zpráva pro administrátory webu
+					textarea(class="form-control", id="claim-msg", placeholder="Vaše zpráva.")
+					
+								
+			div(class="modal-footer")
+				button(type="button", class="btn btn-success", id="claim", data-school_id=school.id) Požádat o převzetí správy
+				button(type="button", class="btn btn-default", data-dismiss="modal") Zavřít

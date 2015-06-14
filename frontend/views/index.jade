@@ -1,10 +1,88 @@
 extends layout
 
 block content
-  h1= title
-  p Vítejte na Školník.cz  
-  
-  h2 Menu
-  ul
-    li
-      a(href="/schools") Přehled škol
+
+  div.homepage
+    .row
+      .col-sm-10.col-xs-offset-1
+        h1
+          strong Najděte školu
+          = ' pro své děti.'          
+    .row
+      .col-sm-8.col-sm-offset-2
+        p.subtitle Naše škola je otevřená databáze mateřských, základních a středních škol na území České republiky, kterou spravují školy a rodiče. 
+          
+  .container
+    #search-box
+      form.form.form-horizontal(method="get", action="/schools/")
+        .row
+          .col-md-8.col-xs-12
+            label(for="loc") Lokalita
+            input#loc.form-control(type="text", name="address", placeholder="zadejte adresu")
+          .col-md-2.col-xs-6
+            label(for="type") Typ školy
+            select#type.form-control(name="school_type")
+              option(value="Mateřská škola") Mateřská
+              option(value="Základní škola") Základní
+              option(value="Střední škola") Střední
+          .col-md-2.col-xs-6
+            label &nbsp;
+            button.btn.btn-default.form-control Najít Školu
+              
+              
+  .homepage-section.white
+    .container
+      .row
+        .col-xs-12
+          h2 Jak to funguje    
+      .row
+        .col-sm-4
+          .item
+            p.img-wrapper
+              img(src="/images/globus.svg")
+            .bubble
+              h3 Lokalita
+              p Vyberte si lokalitu, ve které hledáte školu pro své dítě. Typicky stačí zadat město nebo část města.
+        .col-sm-4
+          .item
+            p.img-wrapper
+              img(src="/images/trychtir.svg")
+            .bubble
+              h3 Filtr pro výsledky
+              p Upřesněte výsledky svého hledání pomocí podrobného filtru. Filtrovat lze například podle vyučovaných jazyků, kroužků něbo kapacity.          
+        .col-sm-4
+          .item
+            p.img-wrapper
+              img(src="/images/stupne.svg")
+              
+            .bubble
+              h3 Porovnání škol
+            p V přehledném zobrazení si porovnejte profil jednotlivých škol mezi sebou. Zobrazení 
+
+  .homepage-section.gray
+    .container
+      .row
+        .col-xs-12
+          h2 Příklady využití    
+      .row
+        .col-sm-4
+          .item
+            p.img-wrapper
+              img(src="/images/lopatka.svg")
+            .bubble
+              h3 Mateřská školka
+              p Vyberte si lokalitu, ve které hledáte školu pro své dítě. Typicky stačí zadat město nebo část města.
+        .col-sm-4
+          .item
+            p.img-wrapper
+              img(src="/images/brasna.svg")
+            .bubble          
+              h3 Základní škola
+              p Upřesněte výsledky svého hledání pomocí podrobného filtru. Filtrovat lze například podle vyučovaných jazyků, kroužků něbo kapacity.          
+        .col-sm-4
+          .item
+            p.img-wrapper
+              img(src="/images/skateboard.svg")
+            .bubble
+              h3 Střední škola
+              p V přehledném zobrazení si porovnejte profil jednotlivých škol mezi sebou. Zobrazení 

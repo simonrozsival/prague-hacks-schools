@@ -1,0 +1,402 @@
+
+@import (less) "./colors.less";
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: "Hind", sans-serif;
+  font-weight: 300;
+  font-size: 16pt/1.5;
+}
+
+* {
+  font-weight: normal;
+}
+
+strong {
+  font-weight: semibold;
+}
+
+.container {
+  max-width: 940px;
+}
+
+/**
+ * Maps
+ */
+
+.map {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/**
+ * Layout
+ */
+ 
+h1, h2, h3, h4, h5 {
+  font-weight: 300;
+  color: @black;
+  
+  &.underlined-title {
+    padding: 15px 30px 5px;
+    border-bottom: 1px solid @black;
+    display: inline-block;
+    text-transform: uppercase;
+    font-weight: 300;
+  }  
+}
+ 
+header#top {  
+  background: @white;
+  height: 80px;
+  border-bottom: 1px solid @black;
+  
+  
+  h1 {
+    display: inline-block;
+      line-height: 50px;
+      height: 46px;
+      font-size: 22pt;
+      font-weight: 300;
+      margin: 17px 0;
+      
+    a {
+      color: @greenText;    
+      font-weight: 300;
+      
+      &:hover {
+        text-decoration: none;
+      }  
+    }
+  }
+  
+  img {
+    height: 46px;
+    line-height: 80px;
+    margin-right: 20px;
+  }
+  
+  a.pull-right {
+    line-height: 80px;
+    text-decoration: none;
+    color: @black;
+  }
+}
+
+.homepage {
+  text-align: center;
+  padding: 50px 0 80px;
+  background: @grayBg;
+  
+  h1 {
+    font-size: 40pt;
+    font-weight: 300;
+    
+    strong {
+      color: @pink; 
+    } 
+  }  
+  
+  p.subtitle {
+    color: @black;
+    font-size: 18pt;
+    font-weight: 300;
+  }
+}
+
+.btn-pink {
+    background: @pink;
+    color: @white;
+    text-transform: uppercase;
+    border-color: @pink;
+    
+    &:hover {
+      color: @white;
+      background: darken(@pink, 10%);
+    }
+    
+    &:focus {
+      outline: none;
+      color: @white;
+    }
+    
+    &:active {
+      outline: none;
+      background: darken(@pink, 15%);
+    }
+  }
+
+#search-box {
+  &:before {
+    content: " ";
+    display: block;
+    width: 120%;
+    height: 140%;
+    position: absolute;
+    left: -10%;
+    top: -20%;
+    
+    border-radius: 2px;
+    background: url("../images/box.svg") no-repeat;
+    background-size: cover;    
+  }
+  
+  position: relative;
+  padding: 10px 20px 20px;
+  margin-bottom: 40px;
+  
+  label {
+    margin-top: 10px;
+    font-size: 16pt;
+  }  
+  
+  input {
+    border-radius: 2px;
+  }
+}
+
+.white {
+  background: @white;
+}
+
+.gray {
+  background: @grayBg;
+}
+
+.homepage-section {
+  &.white {    
+    h3 {      
+      color: @greenText;
+    }
+  }
+  
+  padding: 40px 0;
+  text-align: center;
+  
+  .item {    
+    margin: 30px 0;
+    
+    p.img-wrapper {      
+      height: 100px;
+    }
+  }
+  
+  &.gray .item .bubble {
+    margin-top: 40px;
+    position: relative;
+    border-radius: 2px;
+    
+    &:before {
+      content: " ";
+      display: block;
+      width: 0;
+      height: 0;
+    	border-left: 15px solid transparent;
+    	border-right: 15px solid transparent;    	
+    	border-bottom: 15px solid @darkerGrayBg;
+      position: absolute;
+      top: -15px;
+      left: 50%;
+      margin-left: -15px;
+    }
+    
+    padding: 15px;
+    background: @darkerGrayBg;
+    
+    h3 {
+      margin-top: 10px;
+    }
+  }
+    
+}
+
+footer#bottom {
+  padding: 20px 0 40px;
+  
+  ul {
+    li {
+      display: inline-block;
+      
+      &:not(:last-child) {
+        margin-right: 10px;        
+      }
+      
+      a {
+        color: @black;          
+      }
+      
+      &:not(:first-child):before {
+        content: "|";
+        margin-right: 10px;
+      }
+    }
+  }  
+}
+
+button.school {
+  background: @white;
+  border: 1px solid @darkerGrayBg;
+  border-radius: 1px;
+  padding: 20px 50px 20px 25px;
+  position: relative;
+  margin-top: 25px;
+  width: 100%;
+  text-align: left;
+    
+  h2 {
+    font-size: 14pt;
+    margin: 0 0 15px 0;
+    font-weight: semibold;
+  }
+  
+  &:focus {    
+    outline: none;
+  }
+  
+  &.focus {    
+    transition: all 0.3s;
+    outline: none;
+  }
+  
+  &:not(.focus) {
+    border-color: transparent;
+    background: transparent;
+    
+    &:before {
+      border-color: transparent;
+    }
+  }
+  
+  &:before {
+    content: " ";
+    border: none;
+    border-left: 1px solid @darkerGrayBg;
+    background: @grayBg url("../images/arrow-right.svg") no-repeat center center;    
+    height: 100%;
+    width: 30px;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  
+  table {
+    td {
+      img {
+        
+        margin-right: 15px;
+      }
+      
+      a {
+        color: @greenText;
+      }
+    }
+  }
+}
+
+.area {
+  font-weight: 300;
+  font-size: 12pt;
+  margin-bottom: 25px;
+}
+
+
+#details-column {  
+  min-height: 600px;
+  margin-bottom: 50px;
+    
+  #searchable-map {
+    height: 600px;
+    margin: 30px 0; 
+  }
+
+  .detail {
+    position: absolute;
+    z-index: 200;
+    width: 100%;
+          
+    .school-detail {
+      background: @white;
+      border: 1px solid @darkerGrayBg;
+      padding: 25px 0;      
+      margin-top: 25px;
+      
+      .segment {
+        padding: 25px;
+      }
+      
+      .segment:not(:last-child) {
+        border-bottom: 1px solid @darkerGrayBg;
+      }
+    } 
+  }  
+}
+
+
+#search .esriGeocoder,
+#search .esriGeocoderResults {
+  border-radius: 2px;
+  border-color: @darkerGrayBg;
+}
+
+#search .esriGeocoderContainer {
+  width: 100%;
+  
+  input {
+    width: 80%;
+  }
+}
+
+span#tags-count {
+  width: 22px;
+  padding-right: 4px;
+  margin-right: 10px;
+  height: 21px;
+  line-height: 21px;
+  text-align: center;
+  display: inline-block;
+  background: url("../images/tag.svg") no-repeat center center;
+  color: @white;
+  font-weight: 300;
+}
+
+button#toggle-settings {
+  background: @grayBg;
+  border: 1px solid @darkGray;
+  border-radius: 2px;
+  
+  padding: 5px 42px 5px 12px;
+  position: relative;
+  &:before {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 30px;
+    height: 100%;
+    border-left: 1px solid @darkGray;
+  }
+  
+  &:focus {
+    outline: none;
+  }
+  
+  &:hover {
+    background: @darkerGrayBg;
+  }
+}
+
+#advanced-filtering {
+  display: none;
+  padding: 25px;
+  background: @white;
+  border: 1px solid @darkerGrayBg;
+  border-radius: 2px;
+}
+

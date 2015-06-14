@@ -1,9 +1,59 @@
 extends ../layout
 
 block content
-	h1 Školy!
+	.gray
+		.container
+			.row
+				.col-sm-6
+					.text-center: h1.underlined-title Školy v oblasti
+					p.text-center.area v okruhu 3 km od zvolené adresy
+					
+					p.text-right
+						span#tags-count 1
+						button#toggle-settings podrobné filtrování
+						
+					div#advanced-filtering
+						h3 Lokalita:
+						#search-data(data-lat="", data-lon="", data-address=address)
+						#search
+						
+						if aggregations.hasOwnProperty("languages") && aggregations.languages.hasOwnProperty("buckets")
+							h3 Vyučované jazyky:
+							p
+								each item in aggregations.languages.buckets
+									label.checkbox-inline
+										input(type="checkbox", name=item.key)
+										= item.key
+									
+									
+						if aggregations.hasOwnProperty("pe_hours_per_week") && aggregations.pe_hours_per_week.hasOwnProperty("buckets")
+							h3 Počet hodin tělocviku týdně:
+							p
+								each item in aggregations.pe_hours_per_week.buckets
+									label.checkbox-inline
+										input(type="checkbox", name=item.key)
+										= item.key
+						
+						hr
+						p.text-right: button#filter.btn.btn-pink Filtrovat
+						
+					p#schools
+						each school in schools.items		
+							button.school.focus(data-id=school.id)
+								h2 #{school.general.name}
+								table
+									tr
+										td: img(src="/images/spot.svg")
+										td {school.general.address}										
+									tr
+										td: img(src="/images/computer.svg")
+										td: a(href="#" + school.general.web) {school.general.web}
+								
+					hr
+					p.text-center: button#show-map.btn.btn-link Zobrazit mapu
 
-	ul
-	each school in schools
-		li
-			a(href="/schools/get-detail/" + school.id) #{school.name}
+				#details-column.col-sm-6
+					#searchable-map.map(data-lon=14.4031756, data-lat=50.0881128)
+					
+					
+		

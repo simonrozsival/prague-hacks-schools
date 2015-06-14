@@ -3,6 +3,53 @@ html(lang="cs")
   head
     meta(charset="utf-8")
     title #{title} /Školník.cz/
+    meta(name="viewport", content="initial-scale=1, maximum-scale=1,user-scalable=no")
+    
+    // HIND font
+    link(href='http://fonts.googleapis.com/css?family=Hind:600,300,500', rel='stylesheet', type='text/css')
+        
+    // bootstrap styles
+    link(rel="stylesheet", href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css")
+    
+    // jquery script
+    script(src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js")
+    
+    // bootstrap 3 script
+    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js")
+    
+    // MAPS    
+    link(rel="stylesheet", href="http://js.arcgis.com/3.13/dijit/themes/claro/claro.css")
+    link(rel="stylesheet", href="http://js.arcgis.com/3.13/esri/css/esri.css")
+    script(src="http://js.arcgis.com/3.13/")
+        
+    // "Školník"'s look and feel
     link(rel='stylesheet', href='/stylesheets/style.css')
+    
+    // "Školník"'s javascript
+    script(src="/javascripts/app.js")    
   body
-    block content
+  
+  header(id="top")
+    div(class="container")
+      div(class="row")
+        div(class="col-xs-12")          
+          h1
+            a(href="/")
+              img(src="/images/brasna.svg", alt="Naše škola", height="46")
+              = 'Naše škola'
+            
+          a.pull-right(href="#todo-navod-url") návod k používání
+  
+  block content
+  
+  
+  footer#bottom
+    .container
+      .row
+        .col-xs-12
+          ul.pull-right
+            li: a(href="#") o nás
+            li: a(href="https://www.vcelka.cz") včelka
+            li: a(href="#") cookies
+            li: a(href="#") privacy
+            li: a(href="#") kontakt
