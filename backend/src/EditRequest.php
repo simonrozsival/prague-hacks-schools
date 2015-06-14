@@ -41,6 +41,19 @@ class EditRequest
         return $this->_db->fetchRow($sql);
     }
 
+    public function getByToken($token) {
+        $sql = $this->_db->select()
+            ->from(self::TABLE)
+            ->where('token = ?', $token);
+        return $this->_db->fetchRow($sql);
+    }
+
+    public function allowed($schoolId, $email, $token) {
+        if ($row = $this->getEditRequest($schoolId, $email))
+            return $row['token'] == $token;
+        return FALSE;
+    }
+
     private function removeEditRequest($id)
     {
         return $this->_db->delete(self::TABLE, ['id = ?' => $id]);

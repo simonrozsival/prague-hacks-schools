@@ -2,7 +2,7 @@
     "categories": [
         {
             "key" : "general",
-            "level": 1,
+            "level": 2,
             "name" : "Hlavní", 
             "attributes": [
                 {
@@ -25,7 +25,7 @@
         {
             "key" : "food",
             "name" : "Jídlo",
-            "level" : 2,
+            "level" : 1,
             "attributes": [
                 {
                     "key" : "at_premises",
@@ -47,7 +47,7 @@
         {
             "key" : "teaching",
             "name" : "Výuka",
-            "level" : 2,
+            "level" : 1,
             "attributes": [
                 {
                     "key" : "languages",
