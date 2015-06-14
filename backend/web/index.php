@@ -20,7 +20,7 @@ $app = new Silex\Application();
 $app['debug'] = true;
 
 require_once ROOT . '/app/services.php';
-$hostSpecificConfig = ROOT . '/app/config.' . $_SERVER['HOST'] . '.php';
+$hostSpecificConfig = ROOT . '/app/config.' . $_SERVER['HTTP_HOST'] . '.php';
 if (file_exists($hostSpecificConfig)) {
     require_once $hostSpecificConfig;
 } else {
