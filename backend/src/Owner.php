@@ -29,7 +29,7 @@ class Owner
         $this->_db = $app['db'];
     }
 
-    public function getEditLevel($schoolId, $email, $token)
+    public function getEditLevel($schoolId, $email)
     {
         $sql = $this->_db->select()
             ->from(self::TABLE)

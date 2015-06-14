@@ -112,8 +112,7 @@ $app->post('/api/school/{school_id}/edit/{edit_token}', function (Request $reque
 
     // get the user level
     $ownerModel = new Owner($app, $editRequestModel);
-    $level = $ownerModel->getEditLevel($school_id, $email, $edit_token);
-
+    $level = $ownerModel->getEditLevel($school_id, $email);
 
     // retrieve the actual school document from elastic
     $schoolModel = new School($app);
