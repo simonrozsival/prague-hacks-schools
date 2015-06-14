@@ -1,6 +1,7 @@
 <?php
 use GuzzleHttp\Handler\CurlHandler;
 use GuzzleHttp\HandlerStack;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 $app['elastic'] = $app->share(function ($app) {
     return new \Elastica\Client([
@@ -44,4 +45,8 @@ $app['db'] = $app->share(function ($app) {
     ]);
     $db->query('SET NAMES utf8');
     return $db;
+});
+
+$app['success'] = $app->share(function () {
+    return new JsonResponse(['success' => true], 200);
 });

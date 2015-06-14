@@ -6,6 +6,7 @@ use Hacks\Owner;
 use Hacks\Version;
 use Hacks\School;
 use Hacks\SchoolDesign;
+use Silex\Application;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Nette\Utils\Json;
@@ -81,7 +82,7 @@ $app->post('api/request-edit', function (Request $request) use ($app) {
     $email = $request->get('email');
     $model->handleEditRequest($schoolId, $email);
 
-    return $app->json(['success' => true]);
+    return $app['success'];
 });
 
 
@@ -129,16 +130,25 @@ $app->post('/api/school/{school_id}/edit/{edit_token}', function (Request $reque
         ], 400);
     }
 
-    return $app->json(['success' => true, 'level' => $level]);
-
     // add it to version log
     (new Version($app))
         ->addVersion($school_id, $email, $school);
 
     // store the new document to elastic
     $schoolModel->update($school_id, $document);
+    return $app['success'];
+});
 
-    return $app->json(['success' => true]);
+$app->post('/api/claim-ownership/', function (Application $app, Request $request) {
+    $schoolId = $request->get('school_id');
+    $email = $request->get('email');
+    $message = $request->get('message');
+    if (!$schoolId || !$email || !$message) {
+        return new JsonResponse(['success' => false, 'msg' => 'SchoolId, Email or Message not set'], 400);
+    }
+    $owner = new Owner($app);
+    $owner->claimOwnership($schoolId, $email, $message);
+    return $app['success'];
 });
 
 $app->get('/backend/', function () use ($app) {

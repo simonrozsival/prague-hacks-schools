@@ -56,6 +56,9 @@ class Owner
         $data = array(
             'approved' => TRUE
         );
-        return $this->update($data, 'school_id = ? AND email = ?', $schoolId, $email);
+        return $this->_db->update(self::TABLE, $data, array(
+            'school_id = ?' => $schoolId,
+            'email = ?' => $email,
+        ));
     }
 }

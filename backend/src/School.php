@@ -1,6 +1,7 @@
 <?php
 namespace Hacks;
 
+use Elastica\Type;
 use Silex\Application;
 use Nette\Utils\Json;
 
@@ -47,7 +48,7 @@ class School
     }
 
     /**
-     * @return \Elastica\Client
+     * @return Type
      */
     protected function _getElasticType()
     {
