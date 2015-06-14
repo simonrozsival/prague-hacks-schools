@@ -23,15 +23,16 @@ class SchoolDesign
     public function get() {
     	/** @var \GuzzleHttp\Client $guzzle */
         $guzzle = $this->_app['guzzle'];
-        
+
         $response = $guzzle->get('/schools/design/document');
 
-        if ($response->getStatusCode() == 200)
+        if ($response->getStatusCode() == 200) {
             return Json::decode(
                 $response->getBody()
             )->_source;
-        else
-            return NULL;
+        } else {
+            return null;
+        }
     }
 
     public function isUpdateValid($old, $new, $level) {

@@ -3,8 +3,8 @@
     "general": {
         "name": "Základní škola Letná",
         "position": {
-            "x": 11.2,
-            "y": 22.1
+            "lat": 50.0833625,
+            "lon": 14.4340658
         },
         "headmaster": "Karel Šerý"
     },

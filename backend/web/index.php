@@ -6,6 +6,7 @@ use Hacks\Owner;
 use Hacks\Version;
 use Hacks\School;
 use Hacks\SchoolDesign;
+use Silex\Application;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Nette\Utils\Json;
@@ -18,16 +19,17 @@ define('ROOT', realpath(__DIR__ . '/../'));
 $app = new Silex\Application();
 $app['debug'] = true;
 
-include ROOT . '/app/services.php';
-include ROOT . '/app/config.php';
+require_once ROOT . '/app/services.php';
+$hostSpecificConfig = ROOT . '/app/config.' . $_SERVER['HTTP_HOST'] . '.php';
+if (file_exists($hostSpecificConfig)) {
+    require_once $hostSpecificConfig;
+} else {
+    require_once ROOT . '/app/config.php';
+}
 
 $app->get('/api/', function () use ($app) {
     return $app->json(['msg' => 'Hello, world!']);
 });
-set_exception_handler(function ($e) use ($app) {
-    $app->json($e);
-});
-
 
 /**
  * Subscribe
@@ -85,7 +87,7 @@ $app->post('api/request-edit', function (Request $request) use ($app) {
     $email = $request->get('email');
     $model->handleEditRequest($schoolId, $email);
 
-    return $app->json(['success' => true]);
+    return $app['success'];
 });
 
 
@@ -101,7 +103,7 @@ $app->post('/api/school/{school_id}/edit/{edit_token}', function (Request $reque
     if (!$editRequest) {
         return $app->json([
             'success' => false,
-            'msg' => "1Invalid edit token."
+            'msg' => "Invalid edit token.",
         ], 401);
     }
 
@@ -110,14 +112,13 @@ $app->post('/api/school/{school_id}/edit/{edit_token}', function (Request $reque
     if (!$editRequestModel->allowed($school_id, $email, $edit_token)) {
         return $app->json([
             'success' => false,
-            'msg' => "Invalid edit token."
+            'msg' => "Invalid edit token.",
         ], 401);
     }
 
     // get the user level
     $ownerModel = new Owner($app, $editRequestModel);
-    $level = $ownerModel->getEditLevel($school_id, $email, $edit_token);
-
+    $level = $ownerModel->getEditLevel($school_id, $email);
 
     // retrieve the actual school document from elastic
     $schoolModel = new School($app);
@@ -130,11 +131,9 @@ $app->post('/api/school/{school_id}/edit/{edit_token}', function (Request $reque
         return $app->json([
             'success' => false,
             'msg' => "Cannot edit data of higher level.",
-            'school' => $school
+            'school' => $school,
         ], 400);
     }
-
-    return $app->json(['success' => true, 'level' => $level]);
 
     // add it to version log
     (new Version($app))
@@ -142,8 +141,19 @@ $app->post('/api/school/{school_id}/edit/{edit_token}', function (Request $reque
 
     // store the new document to elastic
     $schoolModel->update($school_id, $document);
+    return $app['success'];
+});
 
-    return $app->json(['success' => true]);
+$app->post('/api/claim-ownership/', function (Application $app, Request $request) {
+    $schoolId = $request->get('school_id');
+    $email = $request->get('email');
+    $message = $request->get('message');
+    if (!$schoolId || !$email || !$message) {
+        return new JsonResponse(['success' => false, 'msg' => 'SchoolId, Email or Message not set'], 400);
+    }
+    $owner = new Owner($app);
+    $owner->claimOwnership($schoolId, $email, $message);
+    return $app['success'];
 });
 
 $app->get('/backend/', function () use ($app) {
@@ -153,5 +163,21 @@ $app->get('/backend/', function () use ($app) {
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => ROOT . '/app/views',
 ));
+
+
+// does not work :(
+$app->error(function (Exception $e, $code) use ($app) {
+    $err = [
+        'success' => false,
+        'msg' => 'Server error',
+    ];
+    if ($app['debug']) {
+        $err ['msg'] = $e->getMessage();
+        $err['code'] = $e->getCode();
+        $err['stack'] = $e->getTraceAsString();
+        $err['previous'] = isset($err['previous']) ? $err['previous'] : '';
+    }
+    $app->json($err, $code);
+});
 
 $app->run();
