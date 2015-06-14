@@ -42,5 +42,6 @@ $app['db'] = $app->share(function ($app) {
         'host' => $app['db.host'],
         'dbname' => $app['db.dbname'],
     ]);
+    $db->query('SET NAMES utf8');
     return $db;
 });
