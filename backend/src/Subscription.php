@@ -1,20 +1,27 @@
 <?php
 namespace Hacks;
 
+use Elastica\Document;
 use Nette\Utils\Json;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class Subscription
 {
+    const TABLE = 'subscriptions';
     /**
      * @var \Silex\Application
      */
     protected $_app;
+    /**
+     * @var \Zend_Db_Adapter_Pdo_Mysql
+     */
+    protected $_db;
 
     public function __construct(Application $app)
     {
         $this->_app = $app;
+        $this->_db = $app['db'];
     }
 
     public static function getId($schoolId, $email)
@@ -22,65 +29,46 @@ class Subscription
         return $schoolId . '_' . md5($email);
     }
 
-    public function insert($schoolId, $email)
+    public function fetchEmailsBySchoolId($schoolId)
     {
-        $id = self::getId($schoolId, $email);
+        $sql = $this->_db->select()
+            ->from(self::TABLE, array('email'))
+            ->where('school_id = ?', $schoolId);
+        return $this->_db->fetchCol($sql);
+    }
 
-        $cancelToken = Util::generateRandomToken();
+    public function subscribe($schoolId, $email)
+    {
+        if ($token = $this->getSubscriptionToken($schoolId, $email)) {
+            return $token;
+        }
+        $token = Util::generateRandomToken();
+        $data = ['school_id' => $schoolId, 'email' => $email, 'cancel_token' => $token];
+        $this->_db->insert(self::TABLE, $data);
+        return $token;
+    }
 
-        $document = new \Elastica\Document($id, [
-            'school_id' => $schoolId,
-            'email' => $email,
-            'cancel_token' => $cancelToken,
+    public function getSubscriptionToken($schoolId, $email)
+    {
+        $sql = $this->_db->select()
+            ->from(self::TABLE, array('cancel_token'))
+            ->where('school_id = ?', $schoolId)
+            ->where('email = ?', $email);
+        return $this->_db->fetchOne($sql);
+    }
+
+    public function unsubscribe($token)
+    {
+        return $this->_db->delete(self::TABLE, [
+            'cancel_token = ?' => $token,
         ]);
-
-        $response = $this->_getElasticType()->addDocument($document);
-        if ($response->getData()['created'] === true) {
-            return $this->_app->json([
-                'success' => true,
-                'cancel_token' => $cancelToken,
-            ]);
-        } else {
-            return $this->_app->json([
-                'success' => false,
-                'status' => $response->getStatus(),
-                'msg' => sprintf('Subscription failed with status %s', $response->getStatus()),
-            ]);
-        }
     }
 
-    public function testSubscription($schoolId, $email)
+    public function getEmailsBySchoolId($schoolId)
     {
-        $id = Subscription::getId($schoolId, $email);
-
-        /** @var \GuzzleHttp\Client $guzzle */
-        $guzzle = $this->_app['guzzle'];
-        return $guzzle->get('/subscriptions/subscriptions/' . $id);
-    }
-
-    public function removeSubscription($schoolId, $email, $cancelToken)
-    {
-        $response = $this->testSubscription($schoolId, $email);
-        if ($response->getStatusCode() == 200) {
-            $document = Json::decode($response->getBody());
-            if ($document->_source->cancel_token == $cancelToken) {
-                $this->_getElasticType()->deleteIds([self::getId($schoolId, $email)], 'subscriptions', 'subscriptions');
-                return new JsonResponse(['success' => true]);
-            } else {
-                return new JsonResponse(['success' => false, 'msg' => sprintf('Cancelation token %s does not match', $cancelToken)]);
-            }
-        } else {
-            return new JsonResponse(['success' => false, 'msg' => 'No such subscription']);
-        }
-    }
-
-    /**
-     * @return \Elastica\Client
-     */
-    protected function _getElasticType()
-    {
-        $es = $this->_app['elastic'];
-        $esType = $es->getIndex('subscriptions')->getType('subscriptions');
-        return $esType;
+        $sql = $this->_db->select()
+            ->from(self::TABLE, ['email'])
+            ->where('school_id = ?', $schoolId);
+        return $this->_db->fetchCol($sql);
     }
 }
