@@ -1,7 +1,8 @@
 
 var es = require("elasticsearch");
 var client = new es.Client({
-	host: "http://schools-hacks.cloudapp.net:8080"
+	host: "http://schools-hacks.cloudapp.net:8080",
+	log: "trace"
 });
 
 var request = require("request");
@@ -16,8 +17,14 @@ function getLocation(address, callback) {
 		method: "GET",
 		uri: osm_request		
 	}, function(error, response, body) {
-		if(error || body.length == 0) {
+		if(error) {
+			console.log(error);
 			callback({ success: false });
+			return;
+		}
+		
+		if(body.length == 0) {
+			callback({ success: false, noResults: true });
 			return;
 		}
 		
@@ -27,7 +34,7 @@ function getLocation(address, callback) {
 		
 		var place = body[0];
 		if(place && place.hasOwnProperty("lon")
-			&& place.hasOwnProperty("lan")) {
+			&& place.hasOwnProperty("lat")) {
 			callback({
 				success: true,
 				location: {
@@ -120,7 +127,7 @@ function queryElastic(setup, callback, location) {
 module.exports = (function() {
 	
 	return {
-		getAll: function(filter, address, callback) {
+		getAll: function(filters, address, callback) {
 			var setup = {
 				index: "schools",
 				type: "school",
@@ -128,32 +135,32 @@ module.exports = (function() {
 					aggregations: {
 						"languages": { "terms": { "field": "teaching.languages" } },
 						"pe_hours_per_week": { "terms": { "field": "teaching.pe_hours_per_week" } }
+					},
+					query: {
+						"filtered": {
+							"query": { "match_all": {} },
+							"filter": {
+								"and": filters
+							}
+						}
 					}
 				}				
 			};
 			
-			// create a query maybe..
-			var q = parseQuery(filter);
-			if(q.length > 0) {
-				setup["q"] = q;
-			}
-			
-			console.log("address: ", address);
 			if(address) {	
 				// Ask Open Street maps to do the job
 				getLocation(address, function(res) {
-					console.log("response: ", res);
 					if(res.success === true) {
-						setup.body.query = {
-							filtered: {
-								filter: {
-									geo_distance: {
-										distance: "3km",
-										"general.position": res.location
-									}							
-								}
-							}
-						};						
+						console.log(setup.body.query.filtered.filter);
+						setup.body.query.filtered.filter.and.push({
+							geo_distance: {
+								"distance": "3km",
+								"general.position": res.location
+							}							
+						});			
+					} else if (res.hasOwnProperty("noResults") && res.noResults === true) {
+						callback([], []); // nothing was found		
+						return;
 					}
 					
 					queryElastic(setup, callback, res.location || undefined);																

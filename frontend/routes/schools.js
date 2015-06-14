@@ -4,13 +4,12 @@ var schools = require("../models/school.js");
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {  
-  schools.getAll({}, req.query.address || "", function (data, aggregations, location) {
-    console.log("address: ", req.query.address );
+  schools.getAll([], req.query.address || undefined, function (data, aggregations, location) {
     res.render('schools/filtering', {
       title: "Přehled škol",
-      schools: { items: [] }, // init with empty list
+      schools: data, // init with empty list
       aggregations: aggregations,
-      address: req.query.address || "Praha",
+      address: req.query.address,
       schoolType: req.query.school_type || "",
       location: location || { lon: 14.4031756, lat: 50.0881128 }
     });
@@ -102,7 +101,7 @@ router.post("/claim-ownership", function(req, res, next) {
 
 // filter schools
 router.get("/nearby", function(req, res, next) {
-    schools.getAll({}, req.query.address, function(data, aggregations, location) {
+    schools.getAll(req.query.filters || [], req.query.address, function(data, aggregations, location) {
       res.send({
           "schools": data,
           "aggregations": aggregations,

@@ -151,22 +151,18 @@ $(function() {
       map = new Map(id, {
         basemap: "streets",
         center: [ mapEl.data("lon"), mapEl.data("lat") ],
-        zoom: 8
-      });              
+        zoom: 12
+      });      
     });
-    
-    var graphicItems = [];
-      
+          
     function addPoint(name, type, point) {    
       var bg = new PictureMarkerSymbol("/images/mapbg.svg", Math.max(50, name.length * 7), 30);
       bg.setOffset(0, 0);
       map.graphics.add(new Graphics(point, bg));
-      graphicItems.push(bg);
       
       var wedge = new PictureMarkerSymbol("/images/mapwedge.svg", 20, 10);
       bg.setOffset(0, 20);
       map.graphics.add(new Graphics(point, wedge));
-      graphicItems.push(wedge);
       
       var text = new TextSymbol();
       text.setText(name);
@@ -174,50 +170,68 @@ $(function() {
       text.setColor(new Color([255, 255, 255, 255]));
       text.setOffset(0, 15);
       map.graphics.add(new Graphics(point, text));
-      graphicItems.push(text);
     }     
   
+    var zoomNextTime = true;
+    var currentZoom = 12;
+  
+    /**
+     * @todo Příliš nezkouat a REAFAKTOROVAT! :D
+     */
     $("body").on("click", "#filter", function() {
       $("#filter").attr("disabled", "disabled").text("Aktualizuji seznam škol...");
+      var filters = [];
+      $("p.input-group").each(function() {
+          var input = $(this).find("input[type=checkbox]");
+          var column = $(this).data("column");
+          input.each(function() {
+            if($(this).is(":checked")) {
+              var pair = {};
+              pair[column] = $(this).parent().text();           
+              filters.push({ "term": pair });
+            }
+          });          
+      });     
+   
+      var search = $("#search-data");
           
-      setTimeout(function() {
-        var search = $("#search-data");    
-        $.ajax({
-          "type": "GET",
-          "url": "/schools/nearby",
-          "data": {
-            "address": $("#search").val()
-          },
-          "success": function(response) {
+      $.ajax({
+        "type": "GET",
+        "url": "/schools/nearby",
+        "data": {
+          "address": $("#search").val(),
+          "filters": filters
+        },
+        "success": function(response) {
+          
+          clearSchoolList();
+          map.graphics.clear();
+          
+          if(response.location) {
+            var foundPoint = new Point(response.location.lon, response.location.lat);
+            map.centerAndZoom(foundPoint, currentZoom + (zoomNextTime ? 1 : -1));
+            zoomNextTime = !zoomNextTime;  
+          }
+          
+          // create the dots on the map
+          // and the list of nearby schools           
+          var data = response.schools.items;
+          for(var i = 0; i < data.length; i++) {
+            var lon = data[i].general.position.lon;
+            var lat = data[i].general.position.lat;
             
-            clearSchoolList();
-            removeMapPoints();
-            
-            if(response.location) {
-              var foundPoint = new Point(response.location.lon, response.location.lat);
-              map.centerAndZoom(foundPoint, 14);  
+            addSchoolToList(data[i]);
+            if(points.indexOf([lon, lat]) == -1) { // do not add the point if it already exists
+              var pt = new Point(lon, lat, new SpatialReference({ wkid: 4326 }));
+              addPoint(data[i].general.name, "school", pt);         
+              points.push(lon, lat);
             }
-            
-            // create the dots on the map
-            // and the list of nearby schools           
-            var data = response.schools.items;
-            for(var i = 0; i < data.length; i++) {
-              var lon = data[i].general.position.lon;
-              var lat = data[i].general.position.lat;
-              
-              addSchoolToList(data[i]);
-              if(points.indexOf([lon, lat]) == -1) { // do not add the point if it already exists
-                var pt = new Point(lon, lat, new SpatialReference({ wkid: 4326 }));
-                addPoint(data[i].general.name, "school", pt);         
-                points.push(lon, lat);
-              }
-            }
-          },
-          "complete": function() {
-            $("#filter").text("Vyfiltrovat").removeAttr("disabled");
-          } 
-        });    
-      }, 1000);              
+          }
+        },
+        "complete": function() {
+          $("#filter").text("Vyfiltrovat").removeAttr("disabled");
+        } 
+      });       
     });
     
     function removeMapPoints() {
@@ -248,6 +262,10 @@ $(function() {
       
       btn.append("<h2>" + name + "</h2>").append(table);
       $("#schools").append(btn);
+    }
+    
+    function initFiltering(aggregations) {
+            
     }
     
     

@@ -14,11 +14,11 @@ block content
 						
 					div#advanced-filtering
 						h3 Lokalita:
-						p.form-group: input#search.form-control(type="text")
+						p.form-group: input#search.form-control(type="text", value=address)
 						
 						if aggregations.hasOwnProperty("languages") && aggregations.languages.hasOwnProperty("buckets")
 							h3 Vyučované jazyky:
-							p
+							p.input-group(data-column="teaching.languages")
 								each item in aggregations.languages.buckets
 									label.checkbox-inline
 										input(type="checkbox", name=item.key)
@@ -27,7 +27,7 @@ block content
 									
 						if aggregations.hasOwnProperty("pe_hours_per_week") && aggregations.pe_hours_per_week.hasOwnProperty("buckets")
 							h3 Počet hodin tělocviku týdně:
-							p
+							p.input-group(data-column="teaching.pe_hours_per_week")
 								each item in aggregations.pe_hours_per_week.buckets
 									label.checkbox-inline
 										input(type="checkbox", name=item.key)
@@ -38,7 +38,7 @@ block content
 						
 					p#schools
 						each school in schools.items		
-							button.school.focus(data-id=school.id)
+							button.school.focus(data-id=school.id, data-name=school.general.name, data-lat=school.general.position.lat, data-lon=school.general.position.lon)
 								h2 #{school.general.name}
 								table
 									tr
