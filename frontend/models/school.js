@@ -4,6 +4,47 @@ var client = new es.Client({
 	host: "http://schools-hacks.cloudapp.net:8080"
 });
 
+var request = require("request");
+var urlencode = require("urlencode");
+
+var openStreetApiUrl = "http://nominatim.openstreetmap.org/search.php?q=";
+function getLocation(address, callback) {
+	var osm_request = openStreetApiUrl + urlencode(address) + "&format=json";
+	console.log("open street maps request: ", osm_request);
+	
+	request({
+		method: "GET",
+		uri: osm_request		
+	}, function(error, response, body) {
+		if(error || body.length == 0) {
+			callback({ success: false });
+			return;
+		}
+		
+		if(typeof(body) === "string") {
+			body = JSON.parse(body);
+		}
+		
+		var place = body[0];
+		if(place && place.hasOwnProperty("lon")
+			&& place.hasOwnProperty("lan")) {
+			callback({
+				success: true,
+				location: {
+					lon: place.lon,
+					lat: place.lat				
+				}
+			});
+			return;	
+		}		
+	
+		// no data
+		callback({ success: false });
+		return;
+	});
+}
+
+
 /**
  * Extracts the information about the schools and creates items array
  */
@@ -54,11 +95,32 @@ function parseQuery(data, prefix) {
 	return res;
 }
 
+function queryElastic(setup, callback, location) {
+	client.search(setup).then(function(response) {	
+		// pass the queried data
+		var schools;
+		try {
+			schools = new Schools(response);
+			callback(schools, response.aggregations, location);
+			return;					
+		} catch (err) {
+			console.log(err);
+			schools = null;
+		}
+		
+		callback(null, {});
+	}, function(err) {
+		// error - no data
+		console.log("Elastic search error:", err);
+		callback(new Schools(), {});
+	});
+}
+
 
 module.exports = (function() {
 	
 	return {
-		getAll: function(filter, callback, location) {
+		getAll: function(filter, address, callback) {
 			var setup = {
 				index: "schools",
 				type: "school",
@@ -70,44 +132,35 @@ module.exports = (function() {
 				}				
 			};
 			
-			if(location) {
-				setup.body.filtered = {
-					filter: {
-						geo_distance: {
-							distance: "200km",
-							"general.position": {
-								"lat": location.lat,
-								"loc": location.loc
-							}
-						}							
-					}
-				};
-			}
-			
 			// create a query maybe..
 			var q = parseQuery(filter);
 			if(q.length > 0) {
 				setup["q"] = q;
 			}
 			
-			client.search(setup).then(function(response) {	
-				// pass the queried data				
-				var schools;
-				try {
-					schools = new Schools(response);
-					callback(schools, response.aggregations);
-					return;					
-				} catch (err) {
-					console.log(err);
-					schools = null;
-				}
-				
-				callback(null, {});
-			}, function(err) {
-				// error - no data
-				console.log("Elastic search error:", err);
-				callback(new Schools(), {});
-			});
+			console.log("address: ", address);
+			if(address) {	
+				// Ask Open Street maps to do the job
+				getLocation(address, function(res) {
+					console.log("response: ", res);
+					if(res.success === true) {
+						setup.body.query = {
+							filtered: {
+								filter: {
+									geo_distance: {
+										distance: "3km",
+										"general.position": res.location
+									}							
+								}
+							}
+						};						
+					}
+					
+					queryElastic(setup, callback, res.location || undefined);																
+				});
+			} else {			
+				queryElastic(setup, callback);				
+			}
 		},
 				
 		get: function(id, callback) {

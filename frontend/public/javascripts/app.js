@@ -153,24 +153,6 @@ $(function() {
         center: [ mapEl.data("lon"), mapEl.data("lat") ],
         zoom: 8
       });              
-            
-      geocoder = new Geocoder({
-        map: map,
-        autoComplete: true,
-        maxLocations: 20,
-        value: ""
-      },"search");
-      geocoder.startup();
-      
-      geocoder.on("select", function() {
-        var foundPoint = new Point(geocoder.results[0].feature.geometry);        
-        var lat = foundPoint.getLatitude().toFixed(2),
-            lon = foundPoint.getLongitude().toFixed(2);
-        map.centerAndZoom(foundPoint, 14);
-            
-        // save for latter form submitting
-        $("#search-data").data("lat", lat).data("lon", lon);
-      });    
     });
     
     var graphicItems = [];
@@ -204,13 +186,17 @@ $(function() {
           "type": "GET",
           "url": "/schools/nearby",
           "data": {
-            "lat": search.data("lat"),
-            "lon": search.data("lon")
+            "address": $("#search").val()
           },
           "success": function(response) {
             
             clearSchoolList();
             removeMapPoints();
+            
+            if(response.location) {
+              var foundPoint = new Point(response.location.lon, response.location.lat);
+              map.centerAndZoom(foundPoint, 14);  
+            }
             
             // create the dots on the map
             // and the list of nearby schools           
@@ -249,7 +235,19 @@ $(function() {
     }
     
     function addSchoolToList(data) {
-      var btn = $("<button>").addClass("school focus");
+      var btn = $("<button>").addClass("school focus").data("id", data.id);
+      var name = data.general.name;
+      var website = "http://www.skola.cz";
+      var address = "Za Řekou 2, Praha 110 00";
+      var table = $(
+          "<table>"
+        + "<tr><td><img src='/images/spot.svg'></td><td>" + address +  "</td></tr>"
+        + "<tr><td><img src='/images/computer.svg'></td><td><a href='" + website + "' target='_blank'>" + website + "</a></td></tr>"
+        + "</table>"
+      );      
+      
+      btn.append("<h2>" + name + "</h2>").append(table);
+      $("#schools").append(btn);
     }
     
     

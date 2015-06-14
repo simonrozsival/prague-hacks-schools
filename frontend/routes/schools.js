@@ -3,25 +3,25 @@ var router = express.Router();
 var schools = require("../models/school.js");
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-  schools.getAll({}, function (data, aggregations) {
-    console.log("aggregations: ", aggregations);
+router.get('/', function(req, res, next) {  
+  schools.getAll({}, req.query.address || "", function (data, aggregations, location) {
+    console.log("address: ", req.query.address );
     res.render('schools/filtering', {
       title: "Přehled škol",
-      schools: data,
+      schools: { items: [] }, // init with empty list
       aggregations: aggregations,
-      address: req.query.address || "",
-      schoolType: req.query.school_type || ""
+      address: req.query.address || "Praha",
+      schoolType: req.query.school_type || "",
+      location: location || { lon: 14.4031756, lat: 50.0881128 }
     });
   })
 });
-
 
 /* GET only the post HTML (suitable for AJAX). */
 router.get('/get-detail-:id', function(req, res, next) {
   schools.get(req.params.id, function(school) {
     if(school === null) {
-      req.status(404).send("Škola není v databázi.");
+      next();
       return;
     }
     
@@ -102,17 +102,14 @@ router.post("/claim-ownership", function(req, res, next) {
 
 // filter schools
 router.get("/nearby", function(req, res, next) {
-    schools.getAll({}, function(data, aggregations) {
+    schools.getAll({}, req.query.address, function(data, aggregations, location) {
       res.send({
           "schools": data,
-          "aggregations": aggregations
+          "aggregations": aggregations,
+          "location": location
       });
-    }, {
-      "lat": req.query.lat,
-      "lon": req.query.lon
     });
 });
-
 
 
 module.exports = router;

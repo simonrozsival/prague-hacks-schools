@@ -14,8 +14,7 @@ block content
 						
 					div#advanced-filtering
 						h3 Lokalita:
-						#search-data(data-lat="", data-lon="", data-address=address)
-						#search
+						p.form-group: input#search.form-control(type="text")
 						
 						if aggregations.hasOwnProperty("languages") && aggregations.languages.hasOwnProperty("buckets")
 							h3 Vyučované jazyky:
@@ -53,7 +52,7 @@ block content
 					p.text-center: button#show-map.btn.btn-link Zobrazit mapu
 
 				#details-column.col-sm-6
-					#searchable-map.map(data-lon=14.4031756, data-lat=50.0881128)
+					#searchable-map.map(data-lon=location.lon, data-lat=location.lat)
 					
 					
 		
