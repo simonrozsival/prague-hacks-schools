@@ -101,6 +101,7 @@ function checkMails($user, $pass)
     if ($mails !== false)
     foreach($mails as $key => $id) {
         $mail_header = imap_headerinfo($mbox, $id);
+
         $confirmEmail = new ConfirmationEmail();
         $confirmEmail->to = $mail_header->from[0]->mailbox . '@' . $mail_header->from[0]->host;
         $confirmEmail->edate = $mail_header->Date;
