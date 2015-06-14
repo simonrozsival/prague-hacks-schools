@@ -24,10 +24,6 @@ include ROOT . '/app/config.php';
 $app->get('/api/', function () use ($app) {
     return $app->json(['msg' => 'Hello, world!']);
 });
-set_exception_handler(function ($e) use ($app) {
-    $app->json($e);
-});
-
 
 /**
  * Subscribe
@@ -153,5 +149,21 @@ $app->get('/backend/', function () use ($app) {
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => ROOT . '/app/views',
 ));
+
+
+// does not work :(
+$app->error(function (Exception $e, $code) use ($app) {
+    $err = [
+        'success' => false,
+        'msg' => 'Server error',
+    ];
+    if ($app['debug']) {
+        $err ['msg'] = $e->getMessage();
+        $err['code'] = $e->getCode();
+        $err['stack'] = $e->getTraceAsString();
+        $err['previous'] = isset($err['previous']) ? $err['previous'] : '';
+    }
+    $app->json($err, $code);
+});
 
 $app->run();
