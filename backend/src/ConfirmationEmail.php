@@ -116,11 +116,11 @@ function checkMails($user, $pass)
             $confirmEmail->edate = $mail_header->Date;
             $confirmEmail->setSubject($mail_header->subject);
             $confirmEmail->send();
-
+            echo 'Known recipient ' . $confirmEmail->to . PHP_EOL;
             imap_setflag_full($mbox, "$id", "\\Seen");
 
         } else {
-
+            echo 'Unknown recipient ' . $confirmEmail->to . PHP_EOL;
             imap_delete($mbox, $id);
 
         }
