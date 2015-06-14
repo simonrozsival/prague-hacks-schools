@@ -36,7 +36,7 @@ class ConfirmationEmail {
         $this->generateToken();
     }
 
-    public function send($test = true) {
+    public function send($test = false) {
 
         $this->body = 'Dobrý den,<br>z vašeho emailu jsme obrželi žádost o rozeslaní zprávy s předmětem "' . $this->subject_encoded .
             '". Pokud chcete emaily opravdu rozeslat, klikněte na <a href="' . self::ADRESA . $this->token . '&email='.$this->to.
