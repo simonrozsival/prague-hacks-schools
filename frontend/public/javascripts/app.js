@@ -211,12 +211,6 @@ $(function() {
                   clearSchoolList();
                   map.graphics.clear();
 
-                  if (response.location) {
-                      var foundPoint = new Point(response.location.lon, response.location.lat);
-                      map.centerAndZoom(foundPoint, currentZoom + (zoomNextTime ? 1 : -1));
-                      zoomNextTime = !zoomNextTime;
-                  }
-
                   // create the dots on the map
                   // and the list of nearby schools
                   var data = response.schools.items;
