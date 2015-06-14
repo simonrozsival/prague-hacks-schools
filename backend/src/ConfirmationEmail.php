@@ -49,7 +49,13 @@ class ConfirmationEmail {
             $mail->addTo($this->to);
             $mail->setFrom(self::FROM_EMAIL);
             $mail->setBodyHtml($this->body);
-            $mail->send();
+            $mail->send(new Zend_Mail_Transport_Smtp('smtp.gmail.com', [
+                'ssl'      => 'ssl',
+                'port'     => '465',
+                'auth'     => 'login',
+                'username' => 'prague.hacks.schools@gmail.com',
+                'password' => 'prague-hacks',
+            ]));
         }
         $this->saveTokenToDB();
 
