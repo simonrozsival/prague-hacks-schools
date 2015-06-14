@@ -3,8 +3,8 @@
     "general": {
         "name": "Základní škola Praha",
         "position": {
-            "x": 11.2,
-            "y": 22.1
+            "lat": 11.2,
+            "lon": 22.1
         },
         "headmaster": "Josef Novák"
     },
