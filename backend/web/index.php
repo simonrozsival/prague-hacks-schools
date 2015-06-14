@@ -44,20 +44,12 @@ $app->post('/api/subscribe', function (Request $request) use ($app) {
     }
 
     $model = new Subscription($app);
-    $response = $model->testSubscription($schoolId, $email);
-
-
-    if ($response->getStatusCode() !== 200) {
-        return $model->insert($schoolId, $email);
-    } else {
-        $body = Json::decode($response->getBody());
-        return $app->json([
-            'success' => true,
-            'cancel_token' => $body->_source->cancel_token,
-        ]);
-    }
+    $token = $model->subscribe($schoolId, $email);
+    return $app->json([
+        'success' => true,
+        'cancel_token' => $token,
+    ]);
 });
-
 
 /**
  * Unsubscribe
@@ -74,9 +66,15 @@ $app->post('/api/unsubscribe', function (Request $request) use ($app) {
     }
 
     $model = new Subscription($app);
-    return $model->removeSubscription($schoolId, $email, $cancelationToken);
+    if (!$token = $model->getSubscriptionToken($schoolId, $email)) {
+        return $app->json(['success' => false, 'msg' => 'Not subscribed.'], 400);
+    }
+    if ($token == $cancelationToken) {
+        $model->unsubscribe($token);
+        return $app['success'];
+    }
+    return $app->json(['success' => false, 'msg' => 'Invalid cancel token.'], 400);
 });
-
 
 /**
  * Request school edit
@@ -89,7 +87,6 @@ $app->post('api/request-edit', function (Request $request) use ($app) {
 
     return $app['success'];
 });
-
 
 /**
  * Edit school
