@@ -97,7 +97,7 @@ $app->post('/api/school/{school_id}/edit/{edit_token}', function (Request $reque
     if (!$editRequest) {
         return $app->json([
             'success' => false,
-            'msg' => "1Invalid edit token."
+            'msg' => "Invalid edit token.",
         ], 401);
     }
 
@@ -106,7 +106,7 @@ $app->post('/api/school/{school_id}/edit/{edit_token}', function (Request $reque
     if (!$editRequestModel->allowed($school_id, $email, $edit_token)) {
         return $app->json([
             'success' => false,
-            'msg' => "Invalid edit token."
+            'msg' => "Invalid edit token.",
         ], 401);
     }
 
@@ -126,7 +126,7 @@ $app->post('/api/school/{school_id}/edit/{edit_token}', function (Request $reque
         return $app->json([
             'success' => false,
             'msg' => "Cannot edit data of higher level.",
-            'school' => $school
+            'school' => $school,
         ], 400);
     }
 

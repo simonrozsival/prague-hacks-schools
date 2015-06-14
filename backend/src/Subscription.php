@@ -1,6 +1,7 @@
 <?php
 namespace Hacks;
 
+use Nette\Utils\Json;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -61,9 +62,9 @@ class Subscription
     {
         $response = $this->testSubscription($schoolId, $email);
         if ($response->getStatusCode() == 200) {
-            $document = json_decode($response->getBody());
+            $document = Json::decode($response->getBody());
             if ($document->_source->cancel_token == $cancelToken) {
-                $this->_getElasticType()->deleteIds([self::getId($schoolId, $email)]);
+                $this->_getElasticType()->deleteIds([self::getId($schoolId, $email)], 'subscriptions', 'subscriptions');
                 return new JsonResponse(['success' => true]);
             } else {
                 return new JsonResponse(['success' => false, 'msg' => sprintf('Cancelation token %s does not match', $cancelToken)]);
