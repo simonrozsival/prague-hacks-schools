@@ -19,8 +19,13 @@ define('ROOT', realpath(__DIR__ . '/../'));
 $app = new Silex\Application();
 $app['debug'] = true;
 
-include ROOT . '/app/services.php';
-include ROOT . '/app/config.php';
+require_once ROOT . '/app/services.php';
+$hostSpecificConfig = ROOT . '/app/config.' . $_SERVER['HOST'] . '.php';
+if (file_exists($hostSpecificConfig)) {
+    require_once $hostSpecificConfig;
+} else {
+    require_once ROOT . '/app/config.php';
+}
 
 $app->get('/api/', function () use ($app) {
     return $app->json(['msg' => 'Hello, world!']);
