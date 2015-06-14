@@ -313,7 +313,10 @@ $(function() {
                   detail.attr("data-id", id);
                   detail.html(data);
                   $("#details-column").append(detail);
-                  detail.css({ top: btn.position().top - detail.find(".underlined-title").outerHeight() - parseInt(detail.find(".school-detail").css("margin-top")) - 2 + "px" });
+                  
+                  var positionTop = Math.max(0, $(window).scrollTop() - $("header#top").height());
+                                    
+                  detail.css({ top: positionTop + "px" });
                   var minHeight = Math.max($("#details-column").height(), detail.height() + detail.position().top);
                   $("#details-column").css("min-height", minHeight + 50 + "px"); // 50 - to make some spare space
                   
@@ -328,7 +331,7 @@ $(function() {
          /**
           * Reset the view
           */
-         $("body").on("click", "#show-map", function() {
+         $("body").on("click", ".show-map", function() {
             // all the others must loose focus first
             $("button.school.focus").each(function() {
                 $(this).removeClass("focus");

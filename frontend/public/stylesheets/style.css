@@ -109,6 +109,24 @@ header#top a.pull-right {
   outline: none;
   background: #9b0323;
 }
+.btn-green {
+  background: #8bc500;
+  color: #ffffff;
+  text-transform: uppercase;
+  border-color: #8bc500;
+}
+.btn-green:hover {
+  color: #ffffff;
+  background: #679200;
+}
+.btn-green:focus {
+  outline: none;
+  color: #ffffff;
+}
+.btn-green:active {
+  outline: none;
+  background: #557900;
+}
 #search-box {
   position: relative;
   padding: 10px 20px 20px;
@@ -123,7 +141,7 @@ header#top a.pull-right {
   left: -10%;
   top: -20%;
   border-radius: 2px;
-  background: url("../images/box.svg") no-repeat;
+  background: url("../images/box.png") no-repeat;
   background-size: cover;
 }
 #search-box label {
@@ -258,14 +276,46 @@ button.school table td a {
 #details-column .detail .school-detail {
   background: #ffffff;
   border: 1px solid #ebebeb;
-  padding: 25px 0;
+  padding: 0;
   margin-top: 25px;
 }
-#details-column .detail .school-detail .segment {
+#details-column .detail .school-detail .segment:not(:last-child) {
   padding: 25px;
 }
 #details-column .detail .school-detail .segment:not(:last-child) {
   border-bottom: 1px solid #ebebeb;
+}
+.school-detail .segment {
+  overflow: hidden;
+}
+.school-detail .segment.uppercase {
+  text-transform: uppercase;
+}
+.school-detail .segment strong {
+  font-size: 20pt;
+}
+.school-detail .segment strong.text-green {
+  color: #8bc500;
+}
+.school-detail .segment.footer,
+.school-detail .segment.header {
+  color: #c3c3c3;
+  font-weight: 300;
+  text-transform: uppercase;
+  font-size: 16pt;
+  padding: 5px 10px;
+}
+.school-detail .segment.footer a,
+.school-detail .segment.header a,
+.school-detail .segment.footer a.btn,
+.school-detail .segment.header a.btn,
+.school-detail .segment.footer a.btn-link,
+.school-detail .segment.header a.btn-link {
+  color: #c3c3c3;
+}
+.school-detail .segment.footer .show-map img,
+.school-detail .segment.header .show-map img {
+  margin-right: 5px;
 }
 #search .esriGeocoder,
 #search .esriGeocoderResults {

@@ -61,7 +61,7 @@ header#top {
   h1 {
     display: inline-block;
     line-height: 50px;
-    height: 60px;;
+    height: 60px;
     margin: 10px 0;
     
     a {
@@ -128,6 +128,28 @@ header#top {
     }
   }
 
+.btn-green {
+    background: @greenText;
+    color: @white;
+    text-transform: uppercase;
+    border-color: @greenText;
+    
+    &:hover {
+      color: @white;
+      background: darken(@greenText, 10%);
+    }
+    
+    &:focus {
+      outline: none;
+      color: @white;
+    }
+    
+    &:active {
+      outline: none;
+      background: darken(@greenText, 15%);
+    }
+  }
+
 #search-box {
   &:before {
     content: " ";
@@ -139,7 +161,7 @@ header#top {
     top: -20%;
     
     border-radius: 2px;
-    background: url("../images/box.svg") no-repeat;
+    background: url("../images/box.png") no-repeat;
     background-size: cover;    
   }
   
@@ -319,10 +341,10 @@ button.school {
     .school-detail {
       background: @white;
       border: 1px solid @darkerGrayBg;
-      padding: 25px 0;      
+      padding: 0;
       margin-top: 25px;
       
-      .segment {
+      .segment:not(:last-child) {
         padding: 25px;
       }
       
@@ -333,6 +355,46 @@ button.school {
   }  
 }
 
+.school-detail {
+  .segment {
+    overflow: hidden;
+    
+    &.uppercase {
+      text-transform: uppercase;
+    }
+    
+    strong {
+      font-size: 20pt;
+      
+      &.text-green {
+        color: @greenText;
+      }
+    }
+    
+    &.footer,
+    &.header {
+      color: @darkGray;
+      font-weight: 300;
+      text-transform: uppercase;
+      font-size: 16pt;
+      
+      a,
+      a.btn,
+      a.btn-link {
+        color: @darkGray;
+      }
+      
+      padding: 5px 10px;
+      
+      .show-map {
+        img {
+          margin-right: 5px;
+        }
+      }
+    }
+    
+  }
+}
 
 #search .esriGeocoder,
 #search .esriGeocoderResults {

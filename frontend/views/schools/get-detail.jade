@@ -3,13 +3,85 @@
 	h1.underlined-title Detail školy
 
 div(class="school-detail")
+	.segment.header
+		span.pull-left
+			button.show-map.btn.btn-link
+				img(src="/images/x.svg")
+				= ' Zavřít'
+		span.pull-right
+			button(type="button", class="btn btn-green") Přidat k porovnání
 	.segment
-		p Ředitel školy: #{school.general.headmaster}	
+		h2.text-center= school.general.name
+		
+		.row
+			.col-sm-2
+				img(src="/images/mail.svg")
+			.col-sm-10
+				table
+					tr
+						td: img(src="/images/spot.svg")
+						td: &nbsp;Za řekou 2, Praha 110 00
+					tr
+						td: img(src="/images/phone.svg")
+						td: &nbsp;+420 123 456 789
+					tr
+						td: img(src="/images/email.svg")
+						td: &nbsp;reditel(a)email.cz
+					tr
+						td: img(src="/images/computer.svg")
+						td
+							&nbsp;
+							a(href="www.skola.cz")
+							www.skola.cz
 	
+	.segment.uppercase
+		.row
+			.col-sm-2
+				img(src="/images/lidi.svg")
+			.col-sm-10
+				strong.pull-left Kapacita
+				strong.pull-right.text-green Volno
+				
 	.segment
-		button(type="button", class="btn btn-block btn-primary", data-toggle="modal", data-target="#subscribe-modal" id="subscribe-btn") Přihlásit se k odběru informací emailem
-		button(type="button", class="btn btn-block btn-default", data-toggle="modal", data-target="#request-editing-modal" id="request-editing-btn") Vyžádat si možnost editace 
-		button(type="button", class="btn btn-block btn-default", data-toggle="modal", data-target="#claim-modal" id="claim-btn") Převzít správu školního profilu
+		.row
+			.col-sm-2
+				img(src="/images/tuzka.svg")
+			.col-sm-10
+				p Dlouhý text s dojemným popisem školy aka ráje na zemi.
+				
+	.segment
+		.row
+			.col-sm-2
+				img(src="/images/paleta.svg")
+			.col-sm-10
+				strong Kroužky
+				ul
+					li Raz
+					li Dva
+					li Tři
+		
+	.segment
+		.row
+			.col-sm-2
+				img(src="/images/jazyky.svg")
+			.col-sm-10
+				strong Jazyky
+				ul
+					li Sanskrt
+					li Jidiš
+					li Mongolština
+				
+			
+	.segment.text-center
+		button(type="button", class="btn btn-pink", data-toggle="modal", data-target="#subscribe-modal" id="subscribe-btn") Odebírat novinky školy
+	.segment.footer		
+		span.pull-left
+			button.show-map.btn.btn-link
+				img(src="/images/x.svg")
+				= ' Zavřít'
+		span.pull-right
+			button(type="button", class="btn btn-link", data-toggle="modal", data-target="#claim-modal" id="claim-btn") Spravovat profil
+			button(type="button", class="btn btn-link", data-toggle="modal", data-target="#request-editing-modal" id="request-editing-btn") Editovat 
 
 
 div(class="modal fade", id="subscribe-modal")
