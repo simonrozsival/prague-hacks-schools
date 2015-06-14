@@ -45,7 +45,7 @@ class Owner
             'school_id' => $schoolId,
             'email' => $email,
             'message' => $message,
-            'approved' => FALSE
+            'approved' => false,
         ];
         $this->_db->insert(self::TABLE, $data);
         return $this->_db->lastInsertId();
@@ -54,7 +54,7 @@ class Owner
     public function approve($schoolId, $email)
     {
         $data = array(
-            'approved' => TRUE
+            'approved' => true,
         );
         return $this->_db->update(self::TABLE, $data, array(
             'school_id = ?' => $schoolId,
