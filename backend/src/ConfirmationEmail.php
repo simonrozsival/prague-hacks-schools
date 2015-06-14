@@ -1,6 +1,8 @@
 <?php
 namespace Hacks;
 
+require_once __DIR__ . '/../vendor/autoload.php';
+
 use PDO;
 
 $limit_tokenu = 30; // minuty
@@ -26,6 +28,7 @@ class ConfirmationEmail {
     const FROM_EMAIL = 'admin@praguehacks.cz';
 
     public $to;
+    public $edate;
 
     private $subject;
     private $subject_encoded;
@@ -81,8 +84,8 @@ class ConfirmationEmail {
         $db = new Database();
         $dbh = $db->connect();
 
-        $sql = $dbh->prepare("insert into tokens (token, subject, email_from) VALUES (?, ?, ?)");
-        $sql->execute(array($this->token, $this->subject, $this->to));
+        $sql = $dbh->prepare("insert into tokens (token, subject, email_from, email_date) VALUES (?, ?, ?, ?)");
+        $sql->execute(array($this->token, $this->subject, $this->to, $this->edate));
 
         return true;
     }
@@ -98,9 +101,9 @@ function checkMails($user, $pass)
     if ($mails !== false)
     foreach($mails as $key => $id) {
         $mail_header = imap_headerinfo($mbox, $id);
-
         $confirmEmail = new ConfirmationEmail();
         $confirmEmail->to = $mail_header->from[0]->mailbox . '@' . $mail_header->from[0]->host;
+        $confirmEmail->edate = $mail_header->Date;
         $confirmEmail->setSubject($mail_header->subject);
         $confirmEmail->send();
 
@@ -116,19 +119,18 @@ function checkToken($token, $email, $limit) {
     $db = new Database();
     $dbh = $db->connect();
 
-    $sql = $dbh->prepare("select * from tokens where email_from = :email and token = :token and NOW() < date_add(dt, interval $limit minute)");
+    $sql = $dbh->prepare("select * from tokens where email_from = :email and token = :token and NOW() <= date_add(dt, interval $limit minute)");
     $sql->bindParam(':token', $token, PDO::PARAM_STR);
     $sql->bindParam(':email', $email, PDO::PARAM_STR);
     $sql->execute();
     $res = $sql->fetchAll(PDO::FETCH_ASSOC);
 
-    //print_r($res);
-
     if ($sql->rowCount() == 1) {
         $mbox = imap_open("{imap.gmail.com:993/ssl}", 'prague.hacks.schools', 'prague-hacks', null, 1,
             array('DISABLE_AUTHENTICATOR' => 'PLAIN')) or die("Can't connect to GMail: " . imap_last_error());
 
-        $search = 'SUBJECT "'.$res[0]['subject'].'" FROM "'.$res[0]['email_from'].'"';
+        $search = 'FROM "'.$res[0]['email_from'].'" ON "'.$res[0]['email_date'] .'"';
+
         $mails = imap_search($mbox, $search);
 
         if ($mails !== false) {
@@ -138,96 +140,23 @@ function checkToken($token, $email, $limit) {
                 $from = $headers->from[0]->mailbox . '@' . $headers->from[0]->host;
                 $subject = $headers->subject;
 
-                $structure = imap_fetchstructure($mbox, $id);
-                //$type = $this->get_mime_type($structure);
-
-                // GET HTML BODY
-                //$body = $this->get_part($connection, $i, "");
+                //$structure = imap_fetchstructure($mbox, $id);
 
                 $raw_body = imap_body($mbox, $id);
 
-                $attachments = array();
-
-                if (isset($structure->parts) && count($structure->parts)) {
-                    for ($e = 0; $e < count($structure->parts); $e++) {
-                        $attachments[$e] = array('is_attachment' => false, 'filename' => '', 'name' => '', 'attachment' => '');
-
-                        if ($structure->parts[$e]->ifdparameters) {
-                            foreach ($structure->parts[$e]->dparameters as $object) {
-                                if (strtolower($object->attribute) == 'filename') {
-                                    $attachments[$e]['is_attachment'] = true;
-                                    $attachments[$e]['filename'] = $object->value;
-                                } //if (strtolower($object->attribute) == 'filename')
-                            } //foreach ($structure->parts[$e]->dparameters as $object)
-                        } //if ($structure->parts[$e]->ifdparameters)
-
-                        if ($structure->parts[$e]->ifparameters) {
-                            foreach ($structure->parts[$e]->parameters as $object) {
-                                if (strtolower($object->attribute) == 'name') {
-                                    $attachments[$e]['is_attachment'] = true;
-                                    $attachments[$e]['name'] = $object->value;
-                                } //if (strtolower($object->attribute) == 'name')
-                            } //foreach ($structure->parts[$e]->parameters as $object)
-                        } //if ($structure->parts[$e]->ifparameters)
-
-                        if ($attachments[$e]['is_attachment']) {
-                            $attachments[$e]['attachment'] = @imap_fetchbody($mbox, $id, $e + 1);
-                            if ($structure->parts[$e]->encoding == 3) {
-                                // 3 = BASE64
-                                $attachments[$e]['attachment'] = base64_decode($attachments[$e]['attachment']);
-                            } //if ($structure->parts[$e]->encoding == 3)
-                            elseif ($structure->parts[$e]->encoding == 4) {
-                                // 4 = QUOTED-PRINTABLE
-                                $attachments[$e]['attachment'] = quoted_printable_decode($attachments[$e]['attachment']);
-                            } //elseif ($structure->parts[$e]->encoding == 4)
-                        } //if ($attachments[$e]['is_attachment'])
-
-                        if ($attachments[$e]['is_attachment']) {
-                            $filename = $attachments[$e]['filename'];
-                            $filename = $attachments[$e]['name'];
-                            $filecontent = $attachments[$e]['attachment'];
-                        } //if ($attachments[$e]['is_attachment'])
-                    } //for ($e = 0; $e < count($structure->parts); $e++)
-                } //if (isset($structure->parts) && count($structure->parts))
-
-
-
-                echo "<pre>";
-                echo "From: " . $headers->Unseen . "<br />";
-                echo "From: " . $from . "<br />";
-                echo "Cc: " . $cc . "<br />";
-                echo "Subject: " . $subject . "<br />";
-                echo "Content Type: " . $type . "<br />";
-                echo "Body: " . $body . "<br />";
-
-
-                $mail = new Zend_Mail();
-
-                $mail->settype(Zend_Mime::MULTIPART_MIXED);
-
-                for ($k = 0; $k < count($attachments); $k++) {
-                    $filename = $attachments[$k]['name'];
-                    $filecontent = $attachments[$k]['attachment'];
-
-                    if ($filename && $filecontent) {
-                        $file = $mail->createAttachment($filecontent);
-                        $file->filename = $filename;
-                    } //if ($filename && $filecontent)
-                } //for ($k = 0; $k < count($attachments); $k++)
-
-
+                $mail = new \Zend_Mail('utf-8');
                 $mail->setFrom($from);
-                $mail->addTo('test@members.bigmanwalking.com');
+                $mail->addTo('neco@example.com');
+//                $mail->addBcc( getMails($res[0]['email_from']) );
                 $mail->setSubject($subject);
-                $mail->setBodyHtml($body);
-                $mail->send();
+                $mail->setBodyText($raw_body);
+                //$mail->send();
 
-                // imap_delete($mbox, $id);
+                //imap_delete($mbox, $id);
             }
         }
 
-        //imap_expunge($mbox);
-
+        imap_expunge($mbox);
         imap_close($mbox);
     }
 }
@@ -241,4 +170,5 @@ if (IsSet($_GET['token']) && IsSet($_GET['email'])) {
 
 checkMails('prague.hacks.schools','prague-hacks');
 
-checkToken('2764644c71449252355fbaf1fb16f1b026c8746f8d7cedfcbd59b63865d85418', 'jan.kasparek@gmail.com', 240);
+checkToken('1fe1d2bc7da8591ff2f9cd990b3cbee63eba4782483f8868073acd73a9de23c5', 'jan.kasparek@gmail.com', 240);
+checkToken('dec9c291a348ab95a9eda3c755e9b24bba14e19aaf15e1b0b855388510d436c0', 'no-reply@accounts.google.com', 240);
