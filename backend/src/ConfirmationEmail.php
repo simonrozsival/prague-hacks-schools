@@ -1,9 +1,6 @@
 <?php
-namespace Hacks;
 
 require_once __DIR__ . '/../vendor/autoload.php';
-
-use PDO;
 
 $limit_tokenu = 240; // minuty
 
