@@ -1,0 +1,305 @@
+FORMAT: 1A
+HOST: http://schools-hacks.cloudapp.net/api
+
+# PragueHacks Školník API
+
+App providing fast search and comparison of schools. Based on
+open data provided by municipalities and using crowdsourcing
+of users and school officials who fill the remaining interesting
+data about the school.
+
+# Školník API Root [/]
+
+Empty request. Use for test of the API and for availability check.
+
+## Hello world [GET]
+
++ Response 200 (application/json)
+
+        {
+            "success": true,
+            "msg": "Hello, world!"
+        }
+
+## Group Anonymous user {level 0}
+
+Actions requested by an anonymous user.
+
+## Subscribe to a school [/subscribe]
+
+Anonymous user subscribes to a selected school. Email notifications
+will be sent to him on important updates.
+
+Returns *cancel token*, token required for verification of cancelling
+this action.
+
+### Subscribe to a school [POST]
+
++ Request (application/json)
+
+            {
+                "school_id": "11234",
+                "email": "john.doe@someemail.com
+            }
+            
++ Response 200 (application/json)
+
+        {
+            "success": true,
+            "cancel_token": "c0fbb4ce07ae7d29658071e265ac9650"
+        }
+        
++ Response 400 (application/json)
+
+        {
+            "success": false,
+            "msg": "Already subscribed."
+        }
+
+## Unsubscribe from a school [/unsubscribe]
+
+Unsubscribe from a school. Use the cancel token obtained from
+the previous subscription action (or otherwise from backend).
+
+### Unsubscribe from a school [POST]
+
++ Request (application/json)
+
+        {
+            "school_id": "11234",
+            "email": "john.doe@someemail.com"
+            "cancel_token": "c0fbb4ce07ae7d29658071e265ac9650"
+        }
+
++ Response 200 (application/json)
+
+        {
+            "success": true
+        }
+        
++ Response 400 (application/json)
+
+        {
+            "success": false,
+            "msg": "Not subscribed.|Invalid cancel token."
+        }
+
+## Request edit [/request-edit]
+
+User requests edit providing an email - system should send him a link
+directed to the edit page.
+
+Server will also generate an *edit token*, that is used for validation
+when applying changes. __The *edit token* is valid only for 1 hour__.
+The edit token will give user the privilege of level 1, but if this
+email is approved as an owner, it will give the privileges of level 2.
+
+If the edit token was already generated, refresh the generation
+datetime and send the email again with the same token.
+
+### Request edit [POST]
+
++ Request (application/json)
+
+        {
+            "school_id": "11234",
+            "email": "john.doe@someemail.com"
+        }
+
++ Response 200 (application/json)
+
+        {
+            "success": true
+        }
+
+## Claim ownership [/claim-ownership]
+
+User claims he wants to be an owner of the school. He has to provide
+proof he is an official. The app administrator has to approve him
+first.
+
+### Claim ownership [POST]
+
++ Request (application/json)
+
+        {
+            "school_id": "11234",
+            "email": "john.doe@someemail.com",
+            "message": "Dobrý den, pracuji na ZŠ ABC Praha 99 jako 
+        správce sítě a rád bych získal přístupová práva. Důkazem budiž můj
+        oficiální školní mail, ze kterého chci získat přístup. Najdete mne
+        na stránkách školy: www.abcpraha99.com/ajtak-lojza"
+        }
+
++ Response 200 (application/json)
+
+        {
+            "success": true
+        }
+
+## Group One-time Editor {level 1}
+
+## Edit school data [/school/{school_id}/edit/{edit_token}]
+
+Edit the school data. User edits data in a form and confirms his edit.
+After edit is completed, the *edit token* must be destroyed.
+
+It is crucial not to simply do a document rewrite, but log the change
+including all old and new values, so the change is reversible.
+
+### Edit school data [POST]
+
++ Request (application/json)
+
+        {
+            "some_category": {
+                "some_key": "some_value",
+                "key2": "another_value"
+            }
+            
+            "another_edited_category": {
+                "key3": 123,
+                "key4": [ 1, 3, 4 ]
+            }
+        }
+
++ Response 200 (application/json)
+
+        {
+            "success": true
+        }
+
++ Response 400 (application/json)
+
+        {
+            "success": false,
+            "msg": "Cannot edit data of higher level."
+        }
+        
++ Response 401 (application/json)
+
+        {
+            "success": false,
+            "msg": "Invalid edit token."
+        }
+
++ Parameters
+    + school_id (string) - School ID
+    + edit_token (string) - Token matching some existing token for
+        given school
+
+## Group School Owner {level 2}
+
+All owners of given school are the same level admins and can add,
+edit and delete other owner's emails.
+
+## List all owners [/owners/list/{school_id}/{owner_token}]
+
+Lists all approved owners of this school.
+
+### List all owners [GET]
+            
++ Response 200 (application/json)
+
+        {
+            "success": true
+        }
+        
++ Response 400 (application/json)
+
+        {
+            "success": false,
+            "msg": "Invalid owner token.|Email already present."
+        }
+
++ Parameters
+    + school_id (string) - School ID
+    + owner_token (string) - Owner token
+
+## Add owner email [/owners/add/{school_id}/{owner_token}]
+
+Owner adds another owner email, which is automatically approved.
+
+### Add owner email [POST]
+
++ Request (application/json)
+
+        {
+            "email": "john.doe@someemail.com"
+        }
+
++ Response 200 (application/json)
+
+        {
+            "success": true
+        }
+        
++ Response 400 (application/json)
+
+        {
+            "success": false,
+            "msg": "Invalid owner token.|Email already present."
+        }
+
++ Parameters
+    + school_id (string) - School ID
+    + owner_token (string) - Owner token
+        
+## Add owner email [/owners/edit/{school_id}/{owner_token}]
+
+Owner edits another owner's email (or his own).
+
+### Edit owner email [POST]
+
++ Request (application/json)
+
+        {
+            "old_email": "john.doe@someemail.com",
+            "email": "doe.john@anotheremail.com"
+        }
+            
++ Response 200 (application/json)
+
+        {
+            "success": true
+        }
+        
++ Response 400 (application/json)
+
+        {
+            "success": false,
+            "msg": "Invalid owner token.|Email does not exist.|Email already present."
+        }
+
++ Parameters
+    + school_id (string) - School ID
+    + owner_token (string) - Owner token
+
+## Delete owner email [/owners/delete/{school_id}/{owner_token}]
+
+Owner deletes another owner's email (or his own).
+
+__Note the 204 response must be empty (no *success: true* this time).__
+
+### Delete owner email [DELETE]
+
++ Request (application/json)
+
+        {
+            "school_id": "11234",
+            "email": "doe.john@anotheremail.com"
+        }
+            
++ Response 204 (application/json)
+
+        
++ Response 400 (application/json)
+
+        {
+            "success": false,
+            "msg": "Invalid owner token.|Email does not exist."
+        }
+        
++ Parameters
+    + school_id (string) - School ID
+    + owner_token (string) - Owner token
