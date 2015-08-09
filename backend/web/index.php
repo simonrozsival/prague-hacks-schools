@@ -28,8 +28,9 @@ require __DIR__ . '/../src/app.php';
 
 $app['http_cache']->run();
 
+exit;
 
-require_once ROOT_PATH . '/app/services.php';
+
 $hostSpecificConfig = ROOT_PATH . '/app/config.' . $_SERVER['HTTP_HOST'] . '.php';
 if (file_exists($hostSpecificConfig)) {
     require_once $hostSpecificConfig;
