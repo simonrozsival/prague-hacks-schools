@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Nette\Utils\Json;
 
-define('ROOT', realpath(__DIR__ . '/../'));
+define('ROOT_PATH', realpath(__DIR__ . '/../'));
 require_once __DIR__ . '/../vendor/autoload.php';
 
 
@@ -29,12 +29,12 @@ require __DIR__ . '/../src/app.php';
 $app['http_cache']->run();
 
 
-require_once ROOT . '/app/services.php';
-$hostSpecificConfig = ROOT . '/app/config.' . $_SERVER['HTTP_HOST'] . '.php';
+require_once ROOT_PATH . '/app/services.php';
+$hostSpecificConfig = ROOT_PATH . '/app/config.' . $_SERVER['HTTP_HOST'] . '.php';
 if (file_exists($hostSpecificConfig)) {
     require_once $hostSpecificConfig;
 } else {
-    require_once ROOT . '/app/config.php';
+    require_once ROOT_PATH . '/app/config.php';
 }
 
 $app->get('/api/', function () use ($app) {
