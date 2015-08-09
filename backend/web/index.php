@@ -11,13 +11,23 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Nette\Utils\Json;
 
-ini_set('display_errors', 'on');
-error_reporting(E_ALL);
-require_once __DIR__ . '/../vendor/autoload.php';
 define('ROOT', realpath(__DIR__ . '/../'));
+require_once __DIR__ . '/../vendor/autoload.php';
+
 
 $app = new Silex\Application();
-$app['debug'] = true;
+if ($_SERVER['SERVER_ADDR'] == '127.0.0.1') {
+    ini_set('display_errors', 'on');
+    error_reporting(E_ALL);
+    require __DIR__ . '/../resources/config/dev.php';
+} else {
+    require __DIR__ . '/../resources/config/prod.php';
+}
+
+require __DIR__ . '/../src/app.php';
+
+$app['http_cache']->run();
+
 
 require_once ROOT . '/app/services.php';
 $hostSpecificConfig = ROOT . '/app/config.' . $_SERVER['HTTP_HOST'] . '.php';
@@ -156,11 +166,6 @@ $app->post('/api/claim-ownership/', function (Application $app, Request $request
 $app->get('/backend/', function () use ($app) {
     return $app['twig']->render('index/index.twig', []);
 });
-
-$app->register(new Silex\Provider\TwigServiceProvider(), array(
-    'twig.path' => ROOT . '/app/views',
-));
-
 
 // does not work :(
 $app->error(function (Exception $e, $code) use ($app) {
