@@ -28,11 +28,13 @@ $app->after(function (Request $request, Response $response) {
 
 $app->register(new ServiceControllerServiceProvider());
 
-$app->register(new MonologServiceProvider(), array(
-    "monolog.logfile" => ROOT_PATH . "/storage/logs/" . Carbon::now('Europe/London')->format("Y-m-d") . ".log",
+/*$app->register(new MonologServiceProvider(), array(
+    "monolog.logfile" => ROOT_PATH . "/storage/logs/" . date('Y-m-d') . ".log",
     "monolog.level" => $app["log.level"],
     "monolog.name" => "application",
-));
+));*/
+
+//$app->register(new HttpCacheServiceProvider(), array("http_cache.cache_dir" => ROOT_PATH . "/storage/cache",));
 
 //load services
 $servicesLoader = new App\ServicesLoader($app);

@@ -27,7 +27,8 @@ if ($_SERVER['SERVER_NAME'] == 'localhost') {
 
 require __DIR__ . '/../src/app.php';
 
-$app['http_cache']->run();
+//$app['http_cache']->run();
+$app->run();
 
 exit;
 
