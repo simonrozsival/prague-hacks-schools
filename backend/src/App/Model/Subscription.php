@@ -1,6 +1,7 @@
 <?php
 namespace App\Model;
 
+use App\Util;
 use Elastica\Document;
 use Nette\Utils\Json;
 use Silex\Application;

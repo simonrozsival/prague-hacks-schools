@@ -1,7 +1,6 @@
 <?php
 namespace App;
 
-use App\Service\Subscription;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\CurlHandler;
 use GuzzleHttp\HandlerStack;
@@ -76,13 +75,22 @@ class ServicesLoader
             return new JsonResponse(['success' => true], 200);
         });
 
-        $this->bindServices()
+        $this->bindModels();
+        $this->bindServices();
     }
 
     private function bindServices()
     {
         $this->app['service.subscription'] = $this->app->share(function () {
-            return new Subscription();
+            return new Service\Subscription($this->app['model.subscription']);
+        });
+    }
+
+    private function bindModels()
+    {
+        $this->app['model.subscription'] = $this->app->share(function () {
+            return new Model\Subscription($this->app['db']);
         });
     }
 }
+

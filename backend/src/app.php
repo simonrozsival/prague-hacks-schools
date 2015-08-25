@@ -7,9 +7,6 @@ use Silex\Provider\TwigServiceProvider;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-date_default_timezone_set('Europe/London');
-define("ROOT_PATH", __DIR__ . "/..");
-
 //handling CORS preflight request
 /** @var Application $app  */
 $app->before(function (Request $request) {

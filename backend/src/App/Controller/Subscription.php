@@ -14,6 +14,19 @@ use Symfony\Component\HttpFoundation\Response;
 
 class Subscription
 {
+    /**
+     * @var \App\Service\Subscription
+     */
+    private $subscriptionService;
+
+    /**
+     * Subscription constructor.
+     */
+    public function __construct(\App\Service\Subscription $subscriptionService)
+    {
+        $this->subscriptionService = $subscriptionService;
+    }
+
     public function subscribeAction(Request $request)
     {
         // check params
@@ -23,9 +36,8 @@ class Subscription
             return new JsonResponse(['success' => false, 'msg' => 'SchoolId or Email not set']);
         }
 
-        $model = new Subscription($app);
-        $token = $model->subscribe($schoolId, $email);
-        return $app->json([
+        $token = $this->subscriptionService->subscribe($schoolId, $email);
+        return new JsonResponse([
             'success' => true,
             'cancel_token' => $token,
         ]);
