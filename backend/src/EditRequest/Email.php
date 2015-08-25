@@ -1,5 +1,5 @@
 <?php
-namespace Hacks\EditRequest;
+namespace App\EditRequest;
 
 class Email
 {

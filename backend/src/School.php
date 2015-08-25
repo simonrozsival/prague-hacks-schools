@@ -1,5 +1,5 @@
 <?php
-namespace Hacks;
+namespace App;
 
 use Elastica\Type;
 use Silex\Application;

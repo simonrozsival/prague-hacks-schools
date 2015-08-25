@@ -1,11 +1,11 @@
 <?php
 use GuzzleHttp\Exception\ClientException;
-use Hacks\EditRequest;
-use Hacks\Subscription;
-use Hacks\Owner;
-use Hacks\Version;
-use Hacks\School;
-use Hacks\SchoolDesign;
+use App\EditRequest;
+use App\Subscription;
+use App\Owner;
+use App\Version;
+use App\School;
+use App\SchoolDesign;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -47,19 +47,7 @@ $app->get('/api/', function () use ($app) {
  */
 $app->post('/api/subscribe', function (Request $request) use ($app) {
 
-    // check params
-    $schoolId = $request->get('school_id');
-    $email = $request->get('email');
-    if (!$schoolId || !$email) {
-        return new JsonResponse(['success' => false, 'msg' => 'SchoolId or Email not set']);
-    }
 
-    $model = new Subscription($app);
-    $token = $model->subscribe($schoolId, $email);
-    return $app->json([
-        'success' => true,
-        'cancel_token' => $token,
-    ]);
 });
 
 /**

@@ -1,6 +1,7 @@
 <?php
 namespace App;
 
+use App\Service\Subscription;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\CurlHandler;
 use GuzzleHttp\HandlerStack;
@@ -27,22 +28,19 @@ class ServicesLoader
 
     public function bindServicesIntoContainer()
     {
-        $this->app['elastic'] = $this -
-            app->share(function ($app) {
-        return new \Elastica\Client([
-            'host' => $app['elastic.host'],
-            'port' => $app['elastic.port'],
-        ]);
-    });
+        $this->app['elastic'] = $this->app->share(function ($app) {
+            return new \Elastica\Client([
+                'host' => $app['elastic.host'],
+                'port' => $app['elastic.port'],
+            ]);
+        });
 
-        $this->app['search'] = $this->
-        app->share(function ($app) {
+        $this->app['search'] = $this->app->share(function ($app) {
             $client = $app['elastic'];
             return new \Elastica\Search($client);
         });
 
-        $this->app['schools'] = $this->
-        app->share(function ($app) {
+        $this->app['schools'] = $this->app->share(function ($app) {
             /** @var \Elastica\Search $search */
             $search = $app['search'];
             $search->addIndex('schools')
@@ -50,8 +48,7 @@ class ServicesLoader
             return $search;
         });
 
-        $this->app['guzzle'] = $this->
-        app->share(function ($app) {
+        $this->app['guzzle'] = $this->app->share(function ($app) {
             $baseUri = $app['elastic.host'] . ':' . $app['elastic.port'];
             $stack = new HandlerStack();
             $stack->setHandler(new CurlHandler());
@@ -64,8 +61,7 @@ class ServicesLoader
             return $client;
         });
 
-        $this->app['db'] = $this->
-        app->share(function ($app) {
+        $this->app['db'] = $this->app->share(function ($app) {
             $db = Zend_Db::factory('pdo_mysql', [
                 'username' => $app['db.username'],
                 'password' => $app['db.password'],
@@ -76,9 +72,17 @@ class ServicesLoader
             return $db;
         });
 
-        $this->app['success'] = $this->
-        app->share(function () {
+        $this->app['success'] = $this->app->share(function () {
             return new JsonResponse(['success' => true], 200);
+        });
+
+        $this->bindServices()
+    }
+
+    private function bindServices()
+    {
+        $this->app['service.subscription'] = $this->app->share(function () {
+            return new Subscription();
         });
     }
 }

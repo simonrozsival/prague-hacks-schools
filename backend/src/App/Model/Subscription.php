@@ -1,5 +1,5 @@
 <?php
-namespace Hacks;
+namespace App\Model;
 
 use Elastica\Document;
 use Nette\Utils\Json;
@@ -9,19 +9,15 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class Subscription
 {
     const TABLE = 'subscriptions';
-    /**
-     * @var \Silex\Application
-     */
-    protected $_app;
+
     /**
      * @var \Zend_Db_Adapter_Pdo_Mysql
      */
     protected $_db;
 
-    public function __construct(Application $app)
+    public function __construct(\Zend_Db_Adapter_Pdo_Mysql $db)
     {
-        $this->_app = $app;
-        $this->_db = $app['db'];
+        $this->_db = $db;
     }
 
     public static function getId($schoolId, $email)

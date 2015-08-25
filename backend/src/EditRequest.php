@@ -1,7 +1,7 @@
 <?php
-namespace Hacks;
+namespace App;
 
-use Hacks\EditRequest\Email;
+use App\EditRequest\Email;
 use Silex\Application;
 
 class EditRequest

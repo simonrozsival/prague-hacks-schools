@@ -1,5 +1,5 @@
 <?php
-namespace Hacks;
+namespace App;
 
 use Silex\Application;
 use Nette\Utils\Json;

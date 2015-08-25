@@ -1,5 +1,5 @@
 <?php
-namespace Hacks;
+namespace App;
 
 class Util
 {

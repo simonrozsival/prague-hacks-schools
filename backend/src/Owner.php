@@ -1,5 +1,5 @@
 <?php
-namespace Hacks;
+namespace App;
 
 use Silex\Application;
 
@@ -19,7 +19,7 @@ class Owner
      */
     protected $_db;
     /**
-     * @var \Hacks\EditRequest
+     * @var \App\EditRequest
      */
     protected $_editRequest;
 

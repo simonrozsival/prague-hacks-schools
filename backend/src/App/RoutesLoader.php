@@ -8,6 +8,7 @@
 
 namespace App;
 
+use App\Controller\Subscription;
 use Silex\Application;
 
 class RoutesLoader
@@ -32,5 +33,9 @@ class RoutesLoader
 
     private function instantiateControllers()
     {
+
+        $this->app['controller.subscription'] = $this->app->share(function () {
+            return new Subscription($this->app['subscription.service']);
+        });
     }
 }
