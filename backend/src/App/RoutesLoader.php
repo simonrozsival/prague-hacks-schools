@@ -36,16 +36,19 @@ class RoutesLoader
         $api->post('/subscribe', 'controller.subscription:subscribeAction');
         $api->post('/unsubscribe', 'controller.subscription:unsubscribeAction');
 
-        $api->post('/school/{schoolId}/request-edit', 'controller.school:requestEditAction');
+        $api->post('/request-edit', 'controller.editRequest:createAction');
 
         $this->app->mount($this->app["api.endpoint"] . '/' . $this->app["api.version"], $api);
     }
 
     private function instantiateControllers()
     {
-
         $this->app['controller.subscription'] = $this->app->share(function () {
             return new Controller\Subscription($this->app['service.subscription']);
+        });
+
+        $this->app['controller.editRequest'] = $this->app->share(function () {
+            return new Controller\School($this->app['service.editRequest']);
         });
     }
 }

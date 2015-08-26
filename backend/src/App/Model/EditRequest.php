@@ -1,25 +1,20 @@
 <?php
-namespace App;
-
-use App\EditRequest\Email;
-use Silex\Application;
+namespace App\Model;
 
 class EditRequest
 {
     const TABLE = 'edit_requests';
     /**
-     * @var \Silex\Application
-     */
-    protected $_app;
-    /**
      * @var \Zend_Db_Adapter_Pdo_Mysql
      */
-    protected $_db;
+    protected $db;
 
-    public function __construct(Application $app)
+    /**
+     * @param \Zend_Db $db
+     */
+    public function __construct(\Zend_Db $db)
     {
-        $this->_app = $app;
-        $this->_db = $app['db'];
+        $this->db = $db;
     }
 
     public function handleEditRequest($schoolId, $email)
@@ -34,10 +29,10 @@ class EditRequest
 
 
     public function getByToken($token) {
-        $sql = $this->_db->select()
+        $sql = $this->db->select()
             ->from(self::TABLE)
             ->where('token = ?', $token);
-        return $this->_db->fetchRow($sql);
+        return $this->db->fetchRow($sql);
     }
 
     public function allowed($schoolId, $email, $token) {
@@ -46,12 +41,12 @@ class EditRequest
         return FALSE;
     }
 
-    private function removeEditRequest($id)
+    public function removeEditRequest($id)
     {
-        return $this->_db->delete(self::TABLE, ['id = ?' => $id]);
+        return $this->db->delete(self::TABLE, ['id = ?' => $id]);
     }
 
-    private function createEditRequest($schoolId, $email)
+    public function createEditRequest($schoolId, $email)
     {
         $date = new \DateTime();
         $date->add(new \DateInterval('PT1H'));
@@ -61,19 +56,29 @@ class EditRequest
             'valid_until' => $date->format('Y-m-d H:i:s'),
             'token' => Util::generateRandomToken(),
         ];
-        $this->_db->insert(self::TABLE, $data);
-        return $this->_db->lastInsertId();
+        $this->db->insert(self::TABLE, $data);
+        return $this->db->lastInsertId();
     }
 
-    private function sendEditLink($editRequestId)
+    public function sendEditLink($editRequestId)
     {
-        $sql = $this->_db->select()
+        $sql = $this->db->select()
             ->from(self::TABLE)
             ->where('id = ?', $editRequestId);
-        if (!$row = $this->_db->fetchRow($sql)) {
+        if (!$row = $this->db->fetchRow($sql)) {
             throw new \Exception(sprintf('Invalid RequestId "%s"', $editRequestId));
         }
         $mailModel = new Email();
         $mailModel->send($row['email'], $row['token']);
+    }
+
+    public function getEditRequest($schoolId, $email)
+    {
+        $sql = $this->db->select()
+            ->from(self::TABLE)
+            ->where('school_id = ?', $schoolId)
+            ->where('email = ?', $email)
+            ->where('valid_until > NOW()');
+        return $this->db->fetchRow($sql);
     }
 }

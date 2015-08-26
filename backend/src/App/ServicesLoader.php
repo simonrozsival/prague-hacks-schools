@@ -84,12 +84,18 @@ class ServicesLoader
         $this->app['service.subscription'] = $this->app->share(function () {
             return new Service\Subscription($this->app['model.subscription']);
         });
+        $this->app['service.editRequest'] = $this->app->share(function () {
+            return new Service\Subscription($this->app['model.editRequest']);
+        });
     }
 
     private function bindModels()
     {
         $this->app['model.subscription'] = $this->app->share(function () {
             return new Model\Subscription($this->app['db']);
+        });
+        $this->app['model.editRequest'] = $this->app->share(function () {
+            return new Model\EditRequest($this->app['db']);
         });
     }
 }
