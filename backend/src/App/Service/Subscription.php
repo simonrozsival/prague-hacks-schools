@@ -27,4 +27,15 @@ class Subscription
     {
         return $this->model->subscribe($schoolId, $email);
     }
+
+    public function unsubscribe($schoolId, $email, $cancelationToken)
+    {
+        if (!$token = $model->getSubscriptionToken($schoolId, $email)) {
+            throw new \App\Exception\Subscription('Not subscribed.', 400);
+        }
+        if ($token != $cancelationToken) {
+            throw new \App\Exception\Subscription('Invalid cancelation token', 400);
+        }
+        return $this->model->unsubscribe($cancelationToken);
+    }
 }

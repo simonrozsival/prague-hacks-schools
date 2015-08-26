@@ -57,24 +57,7 @@ $app->post('/api/subscribe', function (Request $request) use ($app) {
  */
 $app->post('/api/unsubscribe', function (Request $request) use ($app) {
 
-    // check params
-    $schoolId = $request->get('school_id');
-    $email = $request->get('email');
-    $cancelationToken = $request->get('cancel_token');
 
-    if (!$schoolId || !$email || !$cancelationToken) {
-        return new JsonResponse(['success' => false, 'msg' => 'SchoolId, Email or Cancelation token not set']);
-    }
-
-    $model = new Subscription($app);
-    if (!$token = $model->getSubscriptionToken($schoolId, $email)) {
-        return $app->json(['success' => false, 'msg' => 'Not subscribed.'], 400);
-    }
-    if ($token == $cancelationToken) {
-        $model->unsubscribe($token);
-        return $app['success'];
-    }
-    return $app->json(['success' => false, 'msg' => 'Invalid cancel token.'], 400);
 });
 
 /**

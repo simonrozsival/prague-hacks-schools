@@ -42,5 +42,23 @@ class Subscription
             'cancel_token' => $token,
         ]);
     }
+
+    public function unsubscribeAction(Request $request)
+    {
+        // check params
+        $schoolId = $request->get('school_id');
+        $email = $request->get('email');
+        $cancelationToken = $request->get('cancel_token');
+        if (!$schoolId || !$email || !$cancelationToken) {
+            return new JsonResponse(['success' => false, 'msg' => 'SchoolId, Email or Cancelation token not set']);
+        }
+
+        try {
+            $this->subscriptionService->unsubscribe($schoolId, $email, $cancelationToken);
+            return new JsonResponse(['success' => true], 200);
+        } catch (\App\Exception\Subscription $e) {
+            return new JsonResponse(['success' => false, 'msg' => $e->getMessage()], $e->getCode());
+        }
+    }
 }
 
