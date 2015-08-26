@@ -47,6 +47,10 @@ class RoutesLoader
             return new Controller\Subscription($this->app['service.subscription']);
         });
 
+        $this->app['controller.school'] = $this->app->share(function () {
+            return new Controller\School($this->app['service.school']);
+        });
+
         $this->app['controller.editRequest'] = $this->app->share(function () {
             return new Controller\School($this->app['service.editRequest']);
         });

@@ -19,32 +19,36 @@ class School
 
     /**
      * Get the school with given ID
+     *
      * @param int $id
      * @return array|null
      */
-    public function get($id) {
-    	/** @var \GuzzleHttp\Client $guzzle */
+    public function get($id)
+    {
+        /** @var \GuzzleHttp\Client $guzzle */
         $guzzle = $this->_app['guzzle'];
 
         $response = $guzzle->get('/schools/school/' . $id);
         if ($response->getStatusCode() == 200)
             return Json::decode(
-            	$response->getBody()
+                $response->getBody()
             )->_source;
         else
-            return NULL;
+            return null;
     }
 
     /**
      * Simple rewrite of the whole school
+     *
      * @param string $id
      * @param object $json
      */
-    public function update($id, $jsonObject) {
+    public function update($id, $jsonObject)
+    {
         $document = new \Elastica\Document($id, $jsonObject);
         $response = $this->_getElasticType()->addDocument($document);
 
-        return $response->getData()['created'] === TRUE;
+        return $response->getData()['created'] === true;
     }
 
     /**
@@ -55,15 +59,5 @@ class School
         $es = $this->_app['elastic'];
         $esType = $es->getIndex('schools')->getType('school');
         return $esType;
-    }
-
-    public function getEditRequest($schoolId, $email)
-    {
-        $sql = $this->db->select()
-            ->from(self::TABLE)
-            ->where('school_id = ?', $schoolId)
-            ->where('email = ?', $email)
-            ->where('valid_until > NOW()');
-        return $this->db->fetchRow($sql);
     }
 }

@@ -22,11 +22,4 @@ class School
     {
         $this->schoolService = $schoolService;
     }
-
-    public function requestEditAction(Request $request, $schoolId)
-    {
-        $email = $request->get('email');
-        $this->schoolService->requestEdit($schoolId, $email);
-        return new JsonResponse(['success' => true]);
-    }
 }

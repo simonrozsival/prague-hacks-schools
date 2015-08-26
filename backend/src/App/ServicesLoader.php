@@ -84,6 +84,9 @@ class ServicesLoader
         $this->app['service.subscription'] = $this->app->share(function () {
             return new Service\Subscription($this->app['model.subscription']);
         });
+        $this->app['service.school'] = $this->app->share(function () {
+            return new Service\Subscription($this->app['model.school']);
+        });
         $this->app['service.editRequest'] = $this->app->share(function () {
             return new Service\Subscription($this->app['model.editRequest']);
         });
@@ -93,6 +96,9 @@ class ServicesLoader
     {
         $this->app['model.subscription'] = $this->app->share(function () {
             return new Model\Subscription($this->app['db']);
+        });
+        $this->app['model.school'] = $this->app->share(function () {
+            return new Model\School($this->app['db']);
         });
         $this->app['model.editRequest'] = $this->app->share(function () {
             return new Model\EditRequest($this->app['db']);

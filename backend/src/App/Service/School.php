@@ -19,10 +19,4 @@ class School
     {
         $this->schoolModel = $schoolModel;
     }
-
-    public function requestEdit($schoolId, $email)
-    {
-        $editRequestId = $this->schoolModel->requestEdit($schoolId, $email);
-        $this->sendEditLink($editRequestId);
-    }
 }
