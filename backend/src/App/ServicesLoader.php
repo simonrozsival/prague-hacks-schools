@@ -90,6 +90,9 @@ class ServicesLoader
         $this->app['service.editRequest'] = $this->app->share(function () {
             return new Service\Subscription($this->app['model.editRequest']);
         });
+        $this->app['service.owner'] = $this->app->share(function () {
+            return new Service\Owner($this->app['model.owner']);
+        });
     }
 
     private function bindModels()
@@ -102,6 +105,9 @@ class ServicesLoader
         });
         $this->app['model.editRequest'] = $this->app->share(function () {
             return new Model\EditRequest($this->app['db']);
+        });
+        $this->app['model.owner'] = $this->app->share(function () {
+            return new Model\Owner($this->app['db']);
         });
     }
 }

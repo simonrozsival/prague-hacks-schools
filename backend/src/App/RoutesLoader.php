@@ -37,6 +37,7 @@ class RoutesLoader
         $api->post('/unsubscribe', 'controller.subscription:unsubscribeAction');
 
         $api->post('/request-edit', 'controller.editRequest:createAction');
+        $api->post('/claim-ownership', 'controller.ownership:claimAction');
 
         $this->app->mount($this->app["api.endpoint"] . '/' . $this->app["api.version"], $api);
     }

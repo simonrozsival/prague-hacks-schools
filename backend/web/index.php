@@ -107,18 +107,6 @@ $app->post('/api/school/{school_id}/edit/{edit_token}', function (Request $reque
     return $app['success'];
 });
 
-$app->post('/api/claim-ownership/', function (Application $app, Request $request) {
-    $schoolId = $request->get('school_id');
-    $email = $request->get('email');
-    $message = $request->get('message');
-    if (!$schoolId || !$email || !$message) {
-        return new JsonResponse(['success' => false, 'msg' => 'SchoolId, Email or Message not set'], 400);
-    }
-    $owner = new Owner($app);
-    $owner->claimOwnership($schoolId, $email, $message);
-    return $app['success'];
-});
-
 $app->get('/backend/', function () use ($app) {
     return $app['twig']->render('index/index.twig', []);
 });
