@@ -40,25 +40,7 @@ if (file_exists($hostSpecificConfig)) {
     require_once ROOT_PATH . '/app/config.php';
 }
 
-$app->get('/api/', function () use ($app) {
-    return $app->json(['msg' => 'Hello, world!']);
-});
 
-/**
- * Subscribe
- */
-$app->post('/api/subscribe', function (Request $request) use ($app) {
-
-
-});
-
-/**
- * Unsubscribe
- */
-$app->post('/api/unsubscribe', function (Request $request) use ($app) {
-
-
-});
 
 /**
  * Request school edit

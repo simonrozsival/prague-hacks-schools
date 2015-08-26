@@ -55,7 +55,7 @@ class Subscription
 
         try {
             $this->subscriptionService->unsubscribe($schoolId, $email, $cancelationToken);
-            return new JsonResponse(['success' => true], 200);
+            return new JsonResponse(['success' => true]);
         } catch (\App\Exception\Subscription $e) {
             return new JsonResponse(['success' => false, 'msg' => $e->getMessage()], $e->getCode());
         }

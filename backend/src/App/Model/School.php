@@ -1,5 +1,5 @@
 <?php
-namespace App;
+namespace App\Model;
 
 use Elastica\Type;
 use Silex\Application;
@@ -8,13 +8,13 @@ use Nette\Utils\Json;
 class School
 {
     /**
-     * @var \Silex\Application
+     * @var \Zend_Db_Adapter_Pdo_Mysql
      */
-    protected $_app;
+    private $db;
 
-    public function __construct(Application $app)
+    public function __construct(\Zend_Db $db)
     {
-        $this->_app = $app;
+        $this->db = $db;
     }
 
     /**
@@ -55,5 +55,15 @@ class School
         $es = $this->_app['elastic'];
         $esType = $es->getIndex('schools')->getType('school');
         return $esType;
+    }
+
+    public function getEditRequest($schoolId, $email)
+    {
+        $sql = $this->db->select()
+            ->from(self::TABLE)
+            ->where('school_id = ?', $schoolId)
+            ->where('email = ?', $email)
+            ->where('valid_until > NOW()');
+        return $this->db->fetchRow($sql);
     }
 }

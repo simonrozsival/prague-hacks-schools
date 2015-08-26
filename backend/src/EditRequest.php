@@ -31,15 +31,7 @@ class EditRequest
         $this->sendEditLink($editRequestId);
     }
 
-    public function getEditRequest($schoolId, $email)
-    {
-        $sql = $this->_db->select()
-            ->from(self::TABLE)
-            ->where('school_id = ?', $schoolId)
-            ->where('email = ?', $email)
-            ->where('valid_until > NOW()');
-        return $this->_db->fetchRow($sql);
-    }
+
 
     public function getByToken($token) {
         $sql = $this->_db->select()

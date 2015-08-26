@@ -9,6 +9,7 @@
 namespace App;
 
 use Silex\Application;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class RoutesLoader
 {
@@ -27,7 +28,16 @@ class RoutesLoader
     public function bindRoutesToControllers()
     {
         $api = $this->app["controllers_factory"];
-        $api->post('/subscribe', "controller.subscription:subscribeAction");
+
+        $api->get('/', function () {
+            return new JsonResponse(['msg' => 'Hello, world!']);
+        });
+
+        $api->post('/subscribe', 'controller.subscription:subscribeAction');
+        $api->post('/unsubscribe', 'controller.subscription:unsubscribeAction');
+
+        $api->post('/school/{schoolId}/request-edit', 'controller.school:requestEditAction');
+
         $this->app->mount($this->app["api.endpoint"] . '/' . $this->app["api.version"], $api);
     }
 
