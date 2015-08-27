@@ -39,6 +39,8 @@ class RoutesLoader
         $api->post('/request-edit', 'controller.editRequest:createAction');
         $api->post('/claim-ownership', 'controller.ownership:claimAction');
 
+        $api->post('/api/school/{school_id}/edit/{edit_token}', 'controller.school:editAction');
+
         $this->app->mount($this->app["api.endpoint"] . '/' . $this->app["api.version"], $api);
     }
 
