@@ -20,35 +20,34 @@ class School
      */
     private $schoolDesignModel;
 
-    public function __construct(\App\Model\School $schoolModel, \App\Model\SchoolDesign $schoolDesignModel)
+    /**
+     * @var \App\Model\Version
+     */
+    private $versionModel;
+
+    public function __construct(\App\Model\School $schoolModel, \App\Model\SchoolDesign $schoolDesignModel, \App\Model\Version $versionModel)
     {
         $this->schoolModel = $schoolModel;
         $this->schoolDesignModel = $schoolDesignModel;
+        $this->versionModel = $versionModel;
     }
 
-    public function edit($schoolId, $email, $document, $level)
+    public function edit($schoolId, $email, $updatedDocument, $level)
     {
         // retrieve the actual school document from elastic
-        $school = $this->schoolModel->get($schoolId);
+        $originalDocument = $this->schoolModel->get($schoolId);
 
         // check the level privileges - compare old and new versions, find all categories
         // incompatibilities and check if all of those are less or equal to user's level
-        if (!$this->schoolDesignModel->isUpdateValid($school, $document, $level)) {
+        if (!$this->schoolDesignModel->isUpdateValid($originalDocument, $updatedDocument, $level)) {
             $e = new \App\Exception\School('Cannot edit data of higher level.', 400);
-            $e->setSchool($school);
             throw $e;
-            return $app->json([
-                'success' => false,
-                'msg' => "Cannot edit data of higher level.",
-                'school' => $school,
-            ], 400);
         }
 
         // add it to version log
-        (new Version($app))
-            ->addVersion($schoolId, $email, $school);
+        $this->versionModel->addVersion($schoolId, $email, $originalDocument);
 
         // store the new document to elastic
-        $schoolModel->update($schoolId, $document);
+        $this->schoolModel->update($schoolId, $updatedDocument);
     }
 }

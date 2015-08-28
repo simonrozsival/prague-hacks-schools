@@ -1,5 +1,5 @@
 <?php
-namespace App;
+namespace App\Model;
 
 use Silex\Application;
 use Nette\Utils\Json;
@@ -9,19 +9,13 @@ class Version
     const TABLE = 'version';
 
     /**
-     * @var \Silex\Application
+     * @var \Zend_Db_Adapter_Abstract
      */
-    protected $_app;
+    private $db;
 
-    /**
-     * @var \Zend_Db_Adapter_Pdo_Mysql
-     */
-    protected $_db;
-
-    public function __construct(Application $app)
+    public function __construct(\Zend_Db_Adapter_Abstract $db)
     {
-        $this->_app = $app;
-        $this->_db = $app['db'];
+        $this->db = $db;
     }
 
     public function addVersion($schoolId, $email, $jsonObject)
@@ -31,7 +25,7 @@ class Version
             'edited_by' => $email,
             'document' => Json::encode($jsonObject)
         ];
-        $this->_db->insert(self::TABLE, $data);
-        return $this->_db->lastInsertId();
+        $this->db->insert(self::TABLE, $data);
+        return $this->db->lastInsertId();
     }
 }

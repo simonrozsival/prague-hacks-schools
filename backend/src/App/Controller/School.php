@@ -52,8 +52,5 @@ class School
         $level = $this->ownerService->getEditLevel($schoolId, $email);
 
         $this->schoolService->edit($schoolId, $email, $document, $level);
-
-
-        return $app['success'];
     }
 }

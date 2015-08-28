@@ -27,11 +27,19 @@ class ServicesLoader
 
     public function bindServicesIntoContainer()
     {
-        $this->app['elastic'] = $this->app->share(function ($app) {
+        $this->app['es'] = $this->app->share(function ($app) {
             return new \Elastica\Client([
                 'host' => $app['elastic.host'],
                 'port' => $app['elastic.port'],
             ]);
+        });
+
+        $this->app['es.index.schools'] = $this->app->share(function ($app) {
+            return $this->app['es']->getIndex('schools');
+        });
+
+        $this->app['es.type.school'] = $this->app->share(function ($app) {
+            return $this->app['es.index.schools']->getType('school');
         });
 
         $this->app['search'] = $this->app->share(function ($app) {
