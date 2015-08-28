@@ -28,4 +28,24 @@ class EditRequest
         $editRequestId = $this->editRequestModel->createEditRequest($schoolId, $email);
         $this->editRequestModel->sendEditLink($editRequestId);
     }
+
+    public function getEditRequest($edit_token, $school_id, $email)
+    {
+        $editRequest = $this->editRequestModel->getByToken($edit_token);
+        if (!$editRequest) {
+            return $app->json([
+                'success' => false,
+                'msg' => "Invalid edit token.",
+            ], 401);
+        }
+
+        if (!$this->editRequestModel->allowed($school_id, $email, $edit_token)) {
+            return $app->json([
+                'success' => false,
+                'msg' => "Invalid edit token.",
+            ], 401);
+        }
+
+        return $editRequest;
+    }
 }

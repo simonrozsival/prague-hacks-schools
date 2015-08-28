@@ -20,4 +20,9 @@ class Owner
     {
         return $this->ownerModel->claimOwnership($schoolId, $email, $message);
     }
+
+    public function getEditLevel($schoolId, $email)
+    {
+        return $this->ownerModel->getEditLevel($schoolId, $email)
+    }
 }

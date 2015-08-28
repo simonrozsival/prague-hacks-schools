@@ -12,7 +12,7 @@ class EditRequest
     /**
      * @param \Zend_Db $db
      */
-    public function __construct(\Zend_Db $db)
+    public function __construct(\Zend_Db_Adapter_Abstract $db)
     {
         $this->db = $db;
     }
@@ -54,7 +54,7 @@ class EditRequest
             'school_id' => $schoolId,
             'email' => $email,
             'valid_until' => $date->format('Y-m-d H:i:s'),
-            'token' => Util::generateRandomToken(),
+            'token' => \App\Util::generateRandomToken(),
         ];
         $this->db->insert(self::TABLE, $data);
         return $this->db->lastInsertId();
@@ -68,8 +68,8 @@ class EditRequest
         if (!$row = $this->db->fetchRow($sql)) {
             throw new \Exception(sprintf('Invalid RequestId "%s"', $editRequestId));
         }
-        $mailModel = new Email();
-        $mailModel->send($row['email'], $row['token']);
+        $mailModel = new \App\EditRequestEmail($row['email'], $row['token']);
+        $mailModel->send();
     }
 
     public function getEditRequest($schoolId, $email)

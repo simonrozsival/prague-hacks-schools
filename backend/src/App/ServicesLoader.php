@@ -88,7 +88,7 @@ class ServicesLoader
             return new Service\Subscription($this->app['model.school']);
         });
         $this->app['service.editRequest'] = $this->app->share(function () {
-            return new Service\Subscription($this->app['model.editRequest']);
+            return new Service\EditRequest($this->app['model.editRequest']);
         });
         $this->app['service.owner'] = $this->app->share(function () {
             return new Service\Owner($this->app['model.owner']);

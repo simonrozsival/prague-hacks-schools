@@ -30,7 +30,7 @@ class Subscription
 
     public function unsubscribe($schoolId, $email, $cancelationToken)
     {
-        if (!$token = $model->getSubscriptionToken($schoolId, $email)) {
+        if (!$token = $this->model->getSubscriptionToken($schoolId, $email)) {
             throw new \App\Exception\Subscription('Not subscribed.', 400);
         }
         if ($token != $cancelationToken) {

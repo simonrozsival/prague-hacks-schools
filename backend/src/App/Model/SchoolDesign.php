@@ -1,19 +1,20 @@
 <?php
-namespace App;
+namespace App\Model;
 
+use GuzzleHttp\Client;
 use Silex\Application;
 use Nette\Utils\Json;
 
 class SchoolDesign
 {
     /**
-     * @var \Silex\Application
+     * @var Client
      */
-    protected $_app;
+    private $guzzle;
 
-    public function __construct(Application $app)
+    public function __construct(Client $guzzle)
     {
-        $this->_app = $app;
+        $this->guzzle = $guzzle;
     }
 
     /**
@@ -21,10 +22,7 @@ class SchoolDesign
      * @return object
      */
     public function get() {
-    	/** @var \GuzzleHttp\Client $guzzle */
-        $guzzle = $this->_app['guzzle'];
-
-        $response = $guzzle->get('/schools/design/document');
+        $response = $this->guzzle->get('/schools/design/document');
 
         if ($response->getStatusCode() == 200) {
             return Json::decode(

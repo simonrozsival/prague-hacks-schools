@@ -20,6 +20,12 @@ class EditRequest
     {
         $email = $request->get('email');
         $schoolId = $request->get('school_id');
+        if (!$email) {
+            throw new \Exception('"email" not set');
+        }
+        if (!$schoolId) {
+            throw new \Exception('"school_id" not set');
+        }
         $this->editRequestService->requestEdit($schoolId, $email);
         return new JsonResponse(['success' => true]);
     }

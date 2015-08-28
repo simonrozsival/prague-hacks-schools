@@ -18,59 +18,42 @@ class School
      */
     private $schoolService;
 
-    public function __construct(\App\Service\School $schoolService)
+    /**
+     * @var \App\Service\EditRequest
+     */
+    private $editRequestService;
+
+    /**
+     * @var \App\Service\Owner
+     */
+    private $ownerService;
+
+    /**
+     * @param \App\Service\School $schoolService
+     * @param \App\Service\EditRequest $editRequestService
+     * @param \App\Service\Owner $ownerService
+     */
+    public function __construct(\App\Service\School $schoolService, \App\Service\EditRequest $editRequestService, \App\Service\Owner $ownerService)
     {
         $this->schoolService = $schoolService;
+        $this->editRequestService = $editRequestService;
+        $this->ownerService = $ownerService;
     }
 
-    public function editAction(Request $request, $school_id, $edit_token)
+    public function editAction(Request $request, $schoolId, $editToken)
     {
         $document = $request->getContent();
 
-        // check the edit token
-        $editRequestModel = new EditRequest($app);
-        $editRequest = $editRequestModel->getByToken($edit_token);
-        if (!$editRequest) {
-            return $app->json([
-                'success' => false,
-                'msg' => "Invalid edit token.",
-            ], 401);
-        }
 
+        // check the edit token
+        $editRequest = $this->editRequestService->getEditRequest($editToken, $schoolId, $email);
         $email = $editRequest['email'];
 
-        if (!$editRequestModel->allowed($school_id, $email, $edit_token)) {
-            return $app->json([
-                'success' => false,
-                'msg' => "Invalid edit token.",
-            ], 401);
-        }
+        $level = $this->ownerService->getEditLevel($schoolId, $email);
 
-        // get the user level
-        $ownerModel = new Owner($app, $editRequestModel);
-        $level = $ownerModel->getEditLevel($school_id, $email);
+        $this->schoolService->edit($schoolId, $email, $document, $level);
 
-        // retrieve the actual school document from elastic
-        $schoolModel = new School($app);
-        $school = $schoolModel->get($school_id);
 
-        // check the level privileges - compare old and new versions, find all categories
-        // incompatibilities and check if all of those are less or equal to user's level
-        $schoolDesignModel = new SchoolDesign($app);
-        if (!$schoolDesignModel->isUpdateValid($school, $document, $level)) {
-            return $app->json([
-                'success' => false,
-                'msg' => "Cannot edit data of higher level.",
-                'school' => $school,
-            ], 400);
-        }
-
-        // add it to version log
-        (new Version($app))
-            ->addVersion($school_id, $email, $school);
-
-        // store the new document to elastic
-        $schoolModel->update($school_id, $document);
         return $app['success'];
     }
 }
