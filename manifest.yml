@@ -3,7 +3,7 @@ applications:
   buildpack: php_buildpack
   host: naseskoly
   name: naseskoly
-  path: web
+  path: .
   domain: mybluemix.net
   instances: 1
   memory: 128M
