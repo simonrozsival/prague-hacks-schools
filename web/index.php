@@ -14,7 +14,7 @@ use Nette\Utils\Json;
 date_default_timezone_set('Europe/London');
 define('ROOT_PATH', realpath(__DIR__ . '/../'));
 require_once __DIR__ . '/../vendor/autoload.php';
-
+ini_set('display_errors', 'on');
 
 $app = new Silex\Application();
 if ($_SERVER['SERVER_NAME'] == 'localhost') {
