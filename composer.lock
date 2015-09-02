@@ -41,7 +41,7 @@
                     "src/functions_include.php"
                 ],
                 "psr-4": {
-                    "GuzzleHttp\\": "src/"
+                    "App\\": "htdocs/src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",

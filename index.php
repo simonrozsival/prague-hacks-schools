@@ -13,19 +13,19 @@ use Nette\Utils\Json;
 
 date_default_timezone_set('Europe/London');
 define('ROOT_PATH', realpath(__DIR__ . '/../'));
-require_once __DIR__ . '/../../lib/vendor/autoload.php';
+require_once __DIR__ . '/../lib/vendor/autoload.php';
 ini_set('display_errors', 'on');
 
 $app = new Silex\Application();
 if ($_SERVER['SERVER_NAME'] == 'localhost') {
     ini_set('display_errors', 'on');
     error_reporting(E_ALL);
-    require __DIR__ . '/../resources/config/dev.php';
+    require __DIR__ . '/resources/config/dev.php';
 } else {
-    require __DIR__ . '/../resources/config/prod.php';
+    require __DIR__ . '/resources/config/prod.php';
 }
 
-require __DIR__ . '/../src/app.php';
+require __DIR__ . '/src/app.php';
 
 //$app['http_cache']->run();
 $app->run();
