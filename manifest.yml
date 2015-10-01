@@ -4,7 +4,7 @@ applications:
   host: naseskoly
   name: naseskoly
   path: .
-  domain: mybluemix.net
+  domain: eu-gb.mybluemix.net 
   instances: 1
   memory: 128M
   env:
