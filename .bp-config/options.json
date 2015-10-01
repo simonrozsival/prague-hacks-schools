@@ -1,3 +1,4 @@
 {
-    "WEBDIR": "web"
+    "WEBDIR": "web",
+	"LIBDIR": "."
 }
