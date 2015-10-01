@@ -78,3 +78,10 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
+
+graviton_vcap:
+    services:
+        mongodb:
+            type: cleardb
+            name: mysql_cleardb
+

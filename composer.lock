@@ -4,8 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "2fd54960e4a2aede45cd25312d35f98e",
-    "content-hash": "97a65ddfd75e56eb06298c9192afa45f",
+    "hash": "7b906e0152af07263c5f11bffa7d45da",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -768,6 +767,129 @@
                 "orm"
             ],
             "time": "2015-08-31 12:59:39"
+        },
+        {
+            "name": "flow/jsonpath",
+            "version": "0.2.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/FlowCommunications/JSONPath.git",
+                "reference": "4c7165470c6df22180d2a1720bc402d4cdef402e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/FlowCommunications/JSONPath/zipball/4c7165470c6df22180d2a1720bc402d4cdef402e",
+                "reference": "4c7165470c6df22180d2a1720bc402d4cdef402e",
+                "shasum": ""
+            },
+            "require-dev": {
+                "peekmo/jsonpath": "dev-master",
+                "phpunit/phpunit": "dev-master"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Flow\\JSONPath": "src/",
+                    "Flow\\JSONPath\\Test": "tests/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Stephen Frank",
+                    "email": "stephen@flowsa.com"
+                }
+            ],
+            "description": "JSONPath implementation for parsing, searching and flattening arrays",
+            "time": "2015-06-24 08:07:29"
+        },
+        {
+            "name": "graviton/vcap-bundle",
+            "version": "v0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/libgraviton/GravitonVcapBundle.git",
+                "reference": "c136ac2ae8ffbbc319897b2db118004f6869a405"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/libgraviton/GravitonVcapBundle/zipball/c136ac2ae8ffbbc319897b2db118004f6869a405",
+                "reference": "c136ac2ae8ffbbc319897b2db118004f6869a405",
+                "shasum": ""
+            },
+            "require": {
+                "graviton/vcap-config-loader": "0.2.*",
+                "symfony/http-kernel": "~2.6"
+            },
+            "require-dev": {
+                "hairmare/dodat": "*",
+                "phpunit/phpunit": "~4.5",
+                "squizlabs/php_codesniffer": "~2.2",
+                "symfony/console": "~2.6",
+                "symfony/finder": "~2.6",
+                "symfony/framework-bundle": "~2.6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Graviton\\VcapBundle\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL"
+            ],
+            "authors": [
+                {
+                    "name": "Lucas Bickel",
+                    "email": "lucas.bickel@swisscom.com"
+                }
+            ],
+            "description": "Inject VCAP_SERVICES config into symfony2's DIC",
+            "time": "2015-02-27 14:23:09"
+        },
+        {
+            "name": "graviton/vcap-config-loader",
+            "version": "v0.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/libgraviton/vcap-config-loader.git",
+                "reference": "f3c5473684f41df7a4e408f37bf2240174d5404b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/libgraviton/vcap-config-loader/zipball/f3c5473684f41df7a4e408f37bf2240174d5404b",
+                "reference": "f3c5473684f41df7a4e408f37bf2240174d5404b",
+                "shasum": ""
+            },
+            "require": {
+                "flow/jsonpath": "0.2.*"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "*",
+                "squizlabs/php_codesniffer": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Graviton\\Vcap\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL"
+            ],
+            "authors": [
+                {
+                    "name": "Lucas Bickel",
+                    "email": "lucas.bickel@swisscom.com"
+                }
+            ],
+            "description": "Load services config from a VCAP_SERVICES json definition.",
+            "time": "2015-02-22 04:52:00"
         },
         {
             "name": "incenteev/composer-parameter-handler",

@@ -13,6 +13,13 @@ imports:
 #        result_cache_driver: apc
 #        query_cache_driver: apc
 
+parameters:
+    database_host: %graviton_vcap.mysql_cleardb.host%
+    database_port: %graviton_vcap.mysql_cleardb.port%
+    database_name: %graviton_vcap.mysql_cleardb.db%
+    database_user: %graviton_vcap.mysql_cleardb.username%
+    database_password: %graviton_vcap.mysql_cleardb.password%
+
 monolog:
     handlers:
         main:
