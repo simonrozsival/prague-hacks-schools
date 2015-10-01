@@ -8,6 +8,12 @@ imports:
 parameters:
     locale: en
 
+graviton_vcap:
+    services:
+        mongodb:
+            type: cleardb
+            name: ad_55607792e7ff906
+
 framework:
     #esi:             ~
     #translator:      { fallbacks: ["%locale%"] }
@@ -78,10 +84,3 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
-
-graviton_vcap:
-    services:
-        mongodb:
-            type: cleardb
-            name: mysql_cleardb
-

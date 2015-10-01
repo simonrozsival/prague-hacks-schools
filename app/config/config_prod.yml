@@ -14,11 +14,11 @@ imports:
 #        query_cache_driver: apc
 
 parameters:
-    database_host: %graviton_vcap.mysql_cleardb.host%
-    database_port: %graviton_vcap.mysql_cleardb.port%
-    database_name: %graviton_vcap.mysql_cleardb.db%
-    database_user: %graviton_vcap.mysql_cleardb.username%
-    database_password: %graviton_vcap.mysql_cleardb.password%
+    database_host: %graviton_vcap.ad_55607792e7ff906.host%
+    database_port: %graviton_vcap.ad_55607792e7ff906.port%
+    database_name: %graviton_vcap.ad_55607792e7ff906.db%
+    database_user: %graviton_vcap.ad_55607792e7ff906.username%
+    database_password: %graviton_vcap.ad_55607792e7ff906.password%
 
 monolog:
     handlers:
