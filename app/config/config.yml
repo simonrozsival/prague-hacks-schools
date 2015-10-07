@@ -10,9 +10,9 @@ parameters:
 
 graviton_vcap:
     services:
-        mongodb:
+        naseskoly-admin-db:
             type: cleardb
-            name: ad_55607792e7ff906
+            name: naseskoly-admin-db
 
 framework:
     #esi:             ~
